@@ -32,6 +32,113 @@ class Importer:
         time_func('Category', self.import_category)
         time_func('Group', self.import_group)
         time_func('Item', self.import_item)
+        time_func('Region', self.import_region)
+        time_func('Constellation', self.import_constellation)
+        time_func('System', self.import_system)
+
+
+    @transaction.atomic
+    def import_system(self):
+        added = 0
+
+        self.cursor.execute(
+            """
+            SELECT
+                solarSystemID, constellationID, regionID, solarSystemName,
+                x, y, z, factionID, radius
+            FROM mapSolarSystems
+            """
+        )
+
+        for row in self.cursor:
+            db_system = Region.objects.filter(id=row[0])
+            if len(db_system) == 0:
+                db_system = System(
+                    id=row[0]
+                )
+                added += 1
+            else:
+                db_system = db_system[0]
+
+            db_system.constellation_id = row[1]
+            db_system.region_id = row[2]
+            db_system.name = row[3]
+            db_system.x = row[4]
+            db_system.y = row[5]
+            db_system.z = row[6]
+            db_system.factionID = row[7]
+            db_system.radius = row[8]
+            db_system.save()
+
+        return added
+
+
+    @transaction.atomic
+    def import_constellation(self):
+        added = 0
+
+        self.cursor.execute(
+            """
+            SELECT
+                constellationID, regionID, constellationName,
+                x, y, z, factionID, radius
+            FROM mapConstellations
+            """
+        )
+
+        for row in self.cursor:
+            db_constellation = Constellation.objects.filter(id=row[0])
+            if len(db_constellation) == 0:
+                db_constellation = Constellation(
+                    id=row[0]
+                )
+                added += 1
+            else:
+                db_constellation = db_constellation[0]
+
+            db_constellation.region_id = row[1]
+            db_constellation.name = row[2]
+            db_constellation.x = row[3]
+            db_constellation.y = row[4]
+            db_constellation.z = row[5]
+            db_constellation.factionID = row[6]
+            db_constellation.radius = row[7]
+            db_constellation.save()
+
+        return added
+
+
+    @transaction.atomic
+    def import_region(self):
+        added = 0
+
+        self.cursor.execute(
+            """
+            SELECT
+                regionID, regionName, x, y, z, factionID, radius
+            FROM mapRegions
+            """
+        )
+
+        for row in self.cursor:
+            db_region = Region.objects.filter(id=row[0])
+            if len(db_region) == 0:
+                db_region = Region(
+                    id=row[0]
+                )
+                added += 1
+            else:
+                db_region = db_region[0]
+
+            db_region.name = row[1]
+            db_region.x = row[2]
+            db_region.y = row[3]
+            db_region.z = row[4]
+            db_region.factionID = row[5]
+            db_region.radius = row[6]
+            db_region.save()
+
+        return added
 
 
     @transaction.atomic
