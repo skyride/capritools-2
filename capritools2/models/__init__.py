@@ -1,3 +1,8 @@
+# Dscan
+from dscan import *
+from dscanobject import *
+
+# Static Data
 from category import *
 from group import *
 from item import *
