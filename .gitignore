@@ -1,0 +1,12 @@
+*.db
+*.pyc
+*.sublime-project
+*.sublime-workspace
+.idea
+local_settings.py
+.*.swp
+node_modules/
+sqlite-latest.sqlite
+celerybeat-schedule
+celerybeat.pid
+static-dist
