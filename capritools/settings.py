@@ -113,3 +113,24 @@ STATIC_URL = '/static/'
 
 # load local settings
 from local_settings import *  # NOPEP8
+
+
+# Ship Type Highlighting
+DSCAN_HIGHLIGHTS = {
+    883: "warning",
+    547: "warning",
+    906: "info",
+    540: "info",
+    485: "warning",
+    893: "info",
+    833: "info",
+    894: "info",
+    541: "info",
+    902: "warning",
+    832: "success",
+    659: "danger",
+    30: "danger",
+    1527: "success",
+    1534: "info",
+    1538: "warning"
+}

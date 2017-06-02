@@ -42,6 +42,7 @@ def dscan_view(request, key):
         {
             'scan': scan,
             'info': info,
+            'highlights': None,
 
             'ship_count': scan.scanObjects.filter(item__group__category_id=6).count(),
             'ships': Item.objects.filter(
