@@ -1,6 +1,6 @@
 from django.http import HttpResponse
 from django.shortcuts import redirect, reverse
-from django.db.models import Count, Sum
+from django.db.models import Count, Sum, Q
 
 from capritools2.models import Dscan, Group, Item
 from capritools2.stuff import render_page
@@ -82,7 +82,26 @@ def dscan_view(request, key):
                     ships=Count('items')
                 ).order_by(
                     '-ships'
-                )
+                ),
+
+            'misc': Group.objects.filter(
+                    items__scanObjects__dscan=scan,
+                    id__in=[548, 361, 1246, 1276, 1275, 1249]
+                ).annotate(
+                    item_count=Count('items')
+                ).order_by(
+                    '-item_count'
+                ),
+
+            'structures': Group.objects.filter(
+                    items__scanObjects__dscan=scan
+                ).filter(
+                    Q(category_id__in=[65]) | Q(id__in=[365])
+                ).annotate(
+                    item_count=Count('items')
+                ).order_by(
+                    '-item_count'
+                ),
         },
         request
     )

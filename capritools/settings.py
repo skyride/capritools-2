@@ -132,5 +132,9 @@ DSCAN_HIGHLIGHTS = {
     30: "danger",
     1527: "success",
     1534: "info",
-    1538: "warning"
+    1538: "warning",
+    361: "info",
+    548: "info",
+    1275: "danger",
+    1249: "warning"
 }
