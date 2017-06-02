@@ -4,4 +4,5 @@ from . import views
 
 urlpatterns = [
     url(r'^$', views.home, name="home"),
+    url(r'^dscan/$', views.dscan_home, name="dscan")
 ]

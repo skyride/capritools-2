@@ -1,11 +1,9 @@
-from django.http import HttpResponse
-
 from capritools2.stuff import render_page
 
 
-def home(request):
+def dscan_home(request):
     return render_page(
-        "capritools2/base.html",
+        "capritools2/dscan.html",
         {},
         request
     )

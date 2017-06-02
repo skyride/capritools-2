@@ -20,6 +20,5 @@ from django.contrib import admin
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
-
-    url(r'^$', include('capritools2.urls'))
+    url(r'', include('capritools2.urls'))
 ]
