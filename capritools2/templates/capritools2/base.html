@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'capritools2/css/theme-flatly.min.css' %}">
-    <title>CapriTools: {% block title %}{% endblock %}</title>
+    <title>CapriTools // {% block title %}{% endblock %}</title>
   </head>
 
   <body>
@@ -18,13 +18,13 @@
             <span class="icon-bar"></span>
             <span class="icon-bar"></span>
           </button>
-          <a class="navbar-brand" href="{% url 'home' %}">CapriTools</a>
+          <a class="navbar-brand" href="{% url 'home' %}">Capri's Tools</a>
         </div>
 
         <!-- Collect the nav links, forms, and other content for toggling -->
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav" id="nav-list">
-            <li><a href="{% url 'dscan' %}">Dscan</a></li>
+            <li class="{% block active_dscan %}{% endblock %}"><a href="{% url 'dscan' %}">Dscan</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">

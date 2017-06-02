@@ -7,3 +7,11 @@ def dscan_home(request):
         {},
         request
     )
+
+
+def dscan_submit(request):
+    return render_page(
+        "capritools2/dscan.html",
+        {},
+        request
+    )
