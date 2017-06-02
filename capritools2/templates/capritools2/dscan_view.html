@@ -1,5 +1,7 @@
 {% extends 'capritools2/base.html' %}
 
+{% load humanize %}
+
 {% block active_dscan %}active{% endblock %}
 
 {% block content %}
@@ -67,7 +69,7 @@
                     <table class="table table-striped table-hover">
                       {% for group in subs %}
                       <tr>
-                        <td class="active col-lg-2 col-sm-1">
+                        <td class="active col-lg-2 col-sm-2">
                           <div align="center">
                             <strong>{{ group.ships }}</strong>
                           </div>
@@ -119,7 +121,12 @@
                 </div>
 
                 <div class="panel-body">
-                  <!--<strong>Estimated Fleet Mass (excl. Supers):</strong> 5,500,030,000 kg-->
+                  <strong>Estimated Fleet Mass (excl. Supers):</strong> {{ info.total_mass|floatformat:0|intcomma }} kg <br />
+                  <strong>Estimated Fleet Volume (excl. Supers):</strong> {{ info.total_volume|floatformat:0|intcomma }} m3<br />
+                  <strong>Estimated Isotope Consumption to bridge 6ly (Titan):</strong> {{ info.titan_topes|floatformat:0|intcomma }}<br />
+                  <strong>Estimated Isotope Consumption to bridge 8ly (Blops):</strong> {{ info.blops_topes|floatformat:0|intcomma }}<br />
+
+                  <span class="text-muted"><i>Doesn't account for prop mods, modules or rigs</i></span>
                 </div>
               </div>
             </div>
