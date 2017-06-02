@@ -3,13 +3,14 @@ from locale import *
 
 from django.db import transaction
 
-from capritools2.models import Dscan, DscanObject, System
+from capritools2.models import Dscan, DscanObject, System, Item
 from capritools2.stuff import random_key
 
 
 class DscanParser:
     scan = None
     pattern = re.compile(r"(?P<type_id>\d+)\t(?P<name>.+)\t(?P<type_name>.+)\t((?P<distance>[\d,\.]+) (?P<unit>m|km|AU)|(?P<unknown_distance>-))")
+    oldPattern = re.compile(r"(?P<name>.+)\t(?P<type_name>.+)\t((?P<distance>[\d,\.]+) (?P<unit>m|km|AU)|(?P<unknown_distance>-))")
     sunPattern = re.compile(r"(.+) - Star")
     planetPattern = re.compile(r"(.+) [IVX]+")
     moonPattern = re.compile(r"(.+) [IVX]+")
@@ -18,14 +19,15 @@ class DscanParser:
     structurePattern = re.compile(r"(.+) - ")
 
     def __init__(self):
-        self.scan = Dscan(
-            key=random_key(7)
-        )
+        self.item_map = {}
+        for id, name in Item.objects.values_list('id', 'name').all():
+            self.item_map[name] = id
 
 
     # Parse a scan
     @transaction.atomic
     def parse(self, raw):
+        self.scan = Dscan(key=random_key(7))
         self.scan.save()
         lines = raw.splitlines()
 
@@ -33,9 +35,15 @@ class DscanParser:
         for line in lines:
             # Regex parse the line
             m = self.pattern.search(line)
-            if m != None:
+            if m == None:
+                m = self.oldPattern.search(line)
+                if m != None:
+                    m = m.groupdict()
+                    m['type_id'] = self.item_map[m['type_name']]
+            else:
                 m = m.groupdict()
 
+            if m != None:
                 # Parse the distance
                 if m['unit'] == "m":
                     distance = atof(m['distance'].replace(",", ""))
@@ -62,6 +70,7 @@ class DscanParser:
 
             return True
         else:
+            self.scan.delete()
             return False
 
 
