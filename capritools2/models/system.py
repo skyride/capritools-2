@@ -14,3 +14,23 @@ class System(models.Model):
     z = models.FloatField()
     factionID = models.IntegerField(null=True)
     radius = models.FloatField(null=True)
+
+
+    def dotlan_system(self):
+        return "https://evemaps.dotlan.net/map/%s/%s" % (
+            self.region.name.replace(" ", "_"),
+            self.name.replace(" ", "_")
+        )
+
+
+    def dotlan_constellation(self):
+        return "https://evemaps.dotlan.net/map/%s/%s" % (
+            self.region.name.replace(" ", "_"),
+            self.constellation.name.replace(" ", "_")
+        )
+
+
+    def dotlan_region(self):
+        return "https://evemaps.dotlan.net/map/%s" % (
+            self.region.name.replace(" ", "_")
+        )

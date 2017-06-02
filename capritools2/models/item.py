@@ -5,7 +5,7 @@ from marketgroup import MarketGroup
 
 class Item(models.Model):
     id = models.IntegerField(primary_key=True)
-    group = models.ForeignKey(Group)
+    group = models.ForeignKey(Group, related_name="items")
     name = models.CharField(max_length=100)
     description = models.TextField()
     mass = models.FloatField()
