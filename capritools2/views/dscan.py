@@ -14,5 +14,6 @@ def dscan_home(request):
 
 def dscan_submit(request):
     parser = DscanParser()
+    parser.parse(request.POST.get("dscan"))
 
-    return HttpResponse(parser.scan.key)
+    return HttpResponse(parser.scan.system)
