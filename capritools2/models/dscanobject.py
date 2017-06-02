@@ -8,4 +8,4 @@ class DscanObject(models.Model):
     dscan = models.ForeignKey(Dscan, related_name="scanObjects", on_delete=models.CASCADE)
     item = models.ForeignKey(Item, related_name="scanObjects")
     name = models.CharField(max_length=64)
-    distance = models.FloatField(null=True)
+    distance = models.BigIntegerField(null=True)
