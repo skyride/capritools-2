@@ -1,5 +1,5 @@
-from models import Dscan, DscanObject
-from stuff import random_key
+from capritools2.models import Dscan, DscanObject
+from capritools2.stuff import random_key
 
 class DscanParser:
     scan = None

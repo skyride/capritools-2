@@ -8,11 +8,12 @@
 <p class="lead">
 </p>
 
-<form method="post">
+<form action="{% url 'dscan_submit' %}" method="post">
   <fieldset>
+    {% csrf_token %}
     <i><legend>Paste your dscan into the box below</legend></i>
     <div class="form-group">
-      <textarea id="dscan" name="dscan" class="form-control" rows="8"></textarea>
+      <textarea name="dscan" class="form-control" rows="8"></textarea>
     </div>
 
     <div class="form-group">

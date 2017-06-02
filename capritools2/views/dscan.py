@@ -1,4 +1,7 @@
+from django.http import HttpResponse
+
 from capritools2.stuff import render_page
+from capritools2.parsers.dscanparser import DscanParser
 
 
 def dscan_home(request):
@@ -10,8 +13,6 @@ def dscan_home(request):
 
 
 def dscan_submit(request):
-    return render_page(
-        "capritools2/dscan.html",
-        {},
-        request
-    )
+    parser = DscanParser()
+
+    return HttpResponse(parser.scan.key)

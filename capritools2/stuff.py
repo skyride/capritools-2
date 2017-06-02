@@ -1,11 +1,11 @@
 import random, string
 
-from django.shortcuts import render_to_response
+from django.shortcuts import render
 from django.template import RequestContext
 
 
 def render_page(template, data, request):
-    return render_to_response(template, data, RequestContext(request))
+    return render(request, template, data)
 
 
 def random_key(length):
