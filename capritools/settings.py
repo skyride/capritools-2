@@ -138,3 +138,5 @@ DSCAN_HIGHLIGHTS = {
     1275: "danger",
     1249: "warning"
 }
+
+DSCAN_MISC_GROUPS = [548, 361, 1246, 1276, 1275, 1249]
