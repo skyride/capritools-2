@@ -30,9 +30,10 @@ class DscanParser:
         if key == None:
             key = random_key(7)
         self.scan = Dscan(key=key)
+        self.scan.save()
         if added != None:
             self.scan.added = added
-        self.scan.save()
+            self.scan.save()
         lines = raw.splitlines()
 
         objects = []
