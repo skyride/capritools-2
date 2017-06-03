@@ -2,6 +2,15 @@
 from dscan import *
 from dscanobject import *
 
+# Localscan
+from localscan import *
+from localscanchar import *
+
+# Dynamic Data
+from character import *
+from corporation import *
+from alliance import *
+
 # Static Data
 from category import *
 from group import *
