@@ -1,6 +1,8 @@
 import eveapi
 import json
 
+from sets import Set
+
 from django.db import transaction
 
 from capritools2.models import *
@@ -24,28 +26,37 @@ class LocalScanParser:
         self.scan.save()
 
         # Hit the API for characterIDs
-        #names = input.split("\r\n")
+        affiliations = Set()
         r = self.xmlapi.eve.CharacterID(names=input.replace("\r\n", ","))
         ids = map(lambda x: x.characterID, r.characters)
 
         # Parse results
         added = 0
-        affiliations = self.api.post("/characters/affiliation/", data=json.dumps(ids))
-        if affiliations == None:
+        charAffiliations = self.api.post("/characters/affiliation/", data=json.dumps(ids))
+        if charAffiliations == None:
             self.scan.save()
             return False
 
-        for i, affiliation in enumerate(affiliations):
+        for i, affiliation in enumerate(charAffiliations):
             # Populate and retrieve objects in the DB
             char = LocalScanChar(scan=self.scan)
             char.corporation = Corporation.get_or_create(affiliation['corporation_id'])
             if "alliance_id" in affiliation:
                 char.alliance = Alliance.get_or_create(affiliation['alliance_id'])
+                affiliations.add((affiliation['corporation_id'], affiliation['alliance_id']))
             if "faction_id" in affiliation:
                 char.faction = Faction.get_or_create(affiliation['faction_id'])
 
             added += 1
             char.save()
+
+        for corp_id, alliance_id in affiliations:
+            db_affiliation = Affiliation(
+                scan=self.scan,
+                corporation_id=corp_id,
+                alliance_id=alliance_id
+            )
+            db_affiliation.save()
 
         if added > 0:
             return True

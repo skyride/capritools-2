@@ -6,6 +6,20 @@
 $(function () {
   $('[data-toggle="tooltip"]').tooltip()
 })
+
+function highlightOn(ids) {
+  for (var i = 0; i < ids.length; i++) {
+    $("#"+ids[i]).addClass("selected")
+    $("#progress-"+ids[i]).addClass("selected")
+  }
+}
+
+function highlightOff(ids) {
+  for (var i = 0; i < ids.length; i++) {
+    $("#"+ids[i]).removeClass("selected")
+    $("#progress-"+ids[i]).removeClass("selected")
+  }
+}
 {% endblock %}
 
 {% block active_localscan %}active{% endblock %}
@@ -28,8 +42,9 @@ $(function () {
         <div class="col-lg-12">
           <div id="alliances" class="progress">
             {% for alliance in alliances %}
-            <div class="progress-bar progress-bar-{{ alliance.style }}" style="width: {{ alliance.width }}%"
-                 data-toggle="tooltip" data-placement="top" title="{{ alliance.name }} [{{ alliance.ticker }}] ({{ alliance.item_count }})">
+            <div id="progress-{{ alliance.id }}" class="progress-bar progress-bar-{{ alliance.style }}" style="width: {{ alliance.width }}%"
+                 data-toggle="tooltip" data-placement="top" title="{{ alliance.name }} [{{ alliance.ticker }}] ({{ alliance.item_count }})"
+                 onmouseover="highlightOn({{ alliance.affiliations }});" onmouseout="highlightOff({{ alliance.affiliations }});">
               {{ alliance.name }} ({{ alliance.item_count }})
             </div>
             {% endfor %}
@@ -39,8 +54,9 @@ $(function () {
         <div class="col-lg-12">
           <div id="corps" class="progress progress-striped">
             {% for corp in corps %}
-            <div class="progress-bar progress-bar-{{ corp.style }}" style="width: {{ corp.width }}%"
-                 data-toggle="tooltip" data-placement="top" title="{{ corp.name }} [{{ corp.ticker }}] ({{ corp.item_count }})">
+            <div id="progress-{{ corp.id }}" class="progress-bar progress-bar-{{ corp.style }}" style="width: {{ corp.width }}%"
+                 data-toggle="tooltip" data-placement="top" title="{{ corp.name }} [{{ corp.ticker }}] ({{ corp.item_count }})"
+                 onmouseover="highlightOn({{ corp.affiliations }});" onmouseout="highlightOff({{ corp.affiliations }});">
               {{ corp.name }} ({{ corp.item_count }})
             </div>
             {% endfor %}
@@ -57,7 +73,7 @@ $(function () {
               <div class="row">
                 <table class="table table-striped">
                   {% for alliance in alliances %}
-                  <tr>
+                  <tr onmouseover="highlightOn({{ alliance.affiliations }});" onmouseout="highlightOff({{ alliance.affiliations }});">
                     <td class="icon col-lg-1">
                       <a href="{{ alliance.dotlan_link }}">
                         <img class="logo" src="https://image.eveonline.com/Alliance/{{ alliance.id }}_64.png">
@@ -69,7 +85,7 @@ $(function () {
                     </td>
 
                     <td class="ticker">
-                      <span class="pull-right">[{{ alliance.ticker }}]</span>
+                      <span id="{{ alliance.id }}" class="pull-right">[{{ alliance.ticker }}]</span>
                     </td>
 
                     <td>
@@ -95,7 +111,7 @@ $(function () {
               <div class="row">
                 <table class="table table-striped">
                   {% for corp in corps %}
-                  <tr>
+                  <tr onmouseover="highlightOn({{ corp.affiliations }});" onmouseout="highlightOff({{ corp.affiliations }});">
                     <td class="icon col-lg-1">
                       <a href="{{ corp.dotlan_link }}">
                         <img class="logo" src="https://image.eveonline.com/Corporation/{{ corp.id }}_64.png">
@@ -107,7 +123,7 @@ $(function () {
                     </td>
 
                     <td class="ticker">
-                      <span class="pull-right">[{{ corp.ticker }}]</span>
+                      <span id="{{ corp.id }}" class="pull-right">[{{ corp.ticker }}]</span>
                     </td>
 
                     <td>

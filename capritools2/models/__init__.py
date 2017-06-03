@@ -5,6 +5,7 @@ from dscanobject import *
 # Localscan
 from localscan import *
 from localscanchar import *
+from affiliation import *
 
 # Dynamic Data
 from character import *

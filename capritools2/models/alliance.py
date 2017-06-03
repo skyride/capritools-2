@@ -1,3 +1,5 @@
+import json
+
 from django.db import models
 
 
@@ -11,6 +13,13 @@ class Alliance(models.Model):
         return "http://evemaps.dotlan.net/alliance/%s" % (
             self.name.replace(" ", "_")
         )
+
+    def affiliations(self):
+        r = self.localscan_affiliations.values_list('corporation', flat=True)
+        if r.count() > 0:
+            return json.dumps(list(r)+[self.id])
+        else:
+            return "[]"
 
 
     @staticmethod

@@ -1,3 +1,5 @@
+import json
+
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.db.models import Count, Sum, Q
@@ -17,6 +19,16 @@ def localscan_home(request):
 
 def localscan_view(request, key):
     scan = LocalScan.objects.get(key=key)
+
+    affiliations = {}
+    for affiliation in scan.affiliations.values('corporation', 'alliance'):
+        affiliations[affiliation['corporation']] = [affiliation['alliance']]
+
+    for affiliation in scan.affiliations.values('corporation', 'alliance').order_by('alliance'):
+        if affiliation['alliance'] in affiliations:
+            affiliations[affiliation['alliance']].append(affiliation['corporation'])
+        else:
+            affiliations[affiliation['alliance']] = [affiliation['corporation']]
 
     alliances = Alliance.objects.filter(
         localChars__scan=scan
@@ -45,7 +57,8 @@ def localscan_view(request, key):
         {
             'scan': scan,
             'alliances': alliances,
-            'corps': corps
+            'corps': corps,
+            'affiliations': json.dumps(affiliations)
         },
         request
     )
