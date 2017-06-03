@@ -1,9 +1,10 @@
 from django.db import models
 
+from localscan import LocalScan
 from character import Character
 from corporation import Corporation
 from alliance import Alliance
-from localscan import LocalScan
+from faction import Faction
 
 
 class LocalScanChar(models.Model):
@@ -11,3 +12,4 @@ class LocalScanChar(models.Model):
     character = models.ForeignKey(Character)
     corporation = models.ForeignKey(Corporation)
     alliance = models.ForeignKey(Alliance, null=True)
+    faction = models.ForeignKey(Faction, null=True)

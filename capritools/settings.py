@@ -140,3 +140,9 @@ DSCAN_HIGHLIGHTS = {
 }
 
 DSCAN_MISC_GROUPS = [548, 361, 1246, 1276, 1275, 1249]
+
+
+# ESI
+ESI_URL = "https://esi.tech.ccp.is/latest"
+ESI_DATASOURCE = "tranquility"
+ESI_RETRIES = 15

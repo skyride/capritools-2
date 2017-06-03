@@ -26,7 +26,9 @@ class DscanParser:
 
     # Parse a scan
     @transaction.atomic
-    def parse(self, raw, oldFormat=False, key=random_key(7), added=None):
+    def parse(self, raw, oldFormat=False, key=None, added=None):
+        if key == None:
+            key = random_key(7)
         self.scan = Dscan(key=key)
         if added != None:
             self.scan.added = added
