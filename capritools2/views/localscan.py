@@ -18,26 +18,34 @@ def localscan_home(request):
 def localscan_view(request, key):
     scan = LocalScan.objects.get(key=key)
 
+    alliances = Alliance.objects.filter(
+        localChars__scan=scan
+    ).annotate(
+        item_count=Count('localChars')
+    ).order_by(
+        '-item_count'
+    )
+    for i, alliance in enumerate(alliances):
+        alliance.style = ['info', 'success', 'warning', 'danger'][i % 4]
+        alliance.width = (float(100) / scan.characters.count()) * alliance.item_count
+
+    corps = Corporation.objects.filter(
+        localChars__scan=scan
+    ).annotate(
+        item_count=Count('localChars')
+    ).order_by(
+        '-item_count'
+    )
+    for i, corp in enumerate(corps):
+        corp.style = ['info', 'success', 'warning', 'danger'][i % 4]
+        corp.width = (float(100) / scan.characters.count()) * corp.item_count
+
     return render_page(
         "capritools2/localscan_view.html",
         {
             'scan': scan,
-
-            'alliances': Alliance.objects.filter(
-                localChars__scan=scan
-            ).annotate(
-                item_count=Count('localChars')
-            ).order_by(
-                '-item_count'
-            ),
-
-            'corps': Corporation.objects.filter(
-                localChars__scan=scan
-            ).annotate(
-                item_count=Count('localChars')
-            ).order_by(
-                '-item_count'
-            )
+            'alliances': alliances,
+            'corps': corps
         },
         request
     )

@@ -24,6 +24,7 @@ class LocalScanParser:
         self.scan.save()
 
         # Hit the API for characterIDs
+        #names = input.split("\r\n")
         r = self.xmlapi.eve.CharacterID(names=input.replace("\r\n", ","))
         ids = map(lambda x: x.characterID, r.characters)
 
@@ -34,10 +35,9 @@ class LocalScanParser:
             self.scan.save()
             return False
 
-        for affiliation in affiliations:
+        for i, affiliation in enumerate(affiliations):
             # Populate and retrieve objects in the DB
             char = LocalScanChar(scan=self.scan)
-            char.character = Character.get_or_create(affiliation['character_id'])
             char.corporation = Corporation.get_or_create(affiliation['corporation_id'])
             if "alliance_id" in affiliation:
                 char.alliance = Alliance.get_or_create(affiliation['alliance_id'])

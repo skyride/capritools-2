@@ -1,5 +1,3 @@
-
-
 from django.db import models
 
 
@@ -9,16 +7,12 @@ class Character(models.Model):
 
 
     @staticmethod
-    def get_or_create(id):
-        from capritools2.esi import ESI
-
+    def get_or_create(id, name):
         character = Character.objects.filter(id=id)
         if character.count() == 0:
-            api = ESI()
-            r = api.get("/characters/%s/" % id)
             character = Character(
                 id=id,
-                name=r['name']
+                name=name
             )
             character.save()
             return character

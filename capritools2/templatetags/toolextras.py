@@ -10,4 +10,5 @@ def highlight(value):
     else:
         return "active"
 
+
 register.filter('highlight', highlight)
