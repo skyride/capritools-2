@@ -3,6 +3,8 @@
 {% load humanize %}
 {% load toolextras %}
 
+{% block prefix_title %}{{ scan.system.name }} ({{ ship_count }}) {{ scan.added|date:"H:i" }} // {{ scan.added|date:"d/m/y" }}{% endblock %}
+
 {% block active_dscan %}active{% endblock %}
 
 {% block content %}
@@ -18,7 +20,7 @@
 
       <span class="pull-right">
         <strong>Created:</strong>
-        {{ scan.added|date:"d/m/y H:m" }} EVE Time
+        {{ scan.added|date:"d/m/y H:i" }} EVE Time
       </span>
     </div>
 

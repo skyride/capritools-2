@@ -1,6 +1,6 @@
 {% extends 'capritools2/base.html' %}
 
-{% block title %}LSCAN{% endblock %}
+{% block prefix_title %}{{ scan.added|date:"H:i" }} LS ({{ scan.characters.count }}) {{ scan.added|date:"d/m/y" }}{% endblock %}
 
 {% block extra_js %}
 $(function () {
@@ -33,7 +33,7 @@ function highlightOff(ids) {
 
       <span class="pull-right">
         <strong>Created:</strong>
-        {{ scan.added|date:"d/m/y H:m" }} EVE Time
+        {{ scan.added|date:"d/m/y H:i" }} EVE Time
       </span>
     </div>
 
