@@ -2,11 +2,13 @@ import os
 import pytz
 from datetime import datetime
 
+from capritools import local_settings
+
 from capritools2.parsers.dscanparser import DscanParser
 
 
 # Scan folder
-location = "/home/skyride/capritools/scans/"
+location = local_settings.OLD_SCANS_ROOT
 parser = DscanParser()
 
 files = os.listdir(location)

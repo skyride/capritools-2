@@ -23,3 +23,6 @@ DATABASES = {
         'PORT': '',
     },
 }
+
+
+OLD_SCANS_ROOT = "/home/skyride/capritools/scans/"
