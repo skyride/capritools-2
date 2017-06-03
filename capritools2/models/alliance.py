@@ -7,6 +7,12 @@ class Alliance(models.Model):
     ticker = models.CharField(max_length=5)
 
 
+    def dotlan_link(self):
+        return "http://evemaps.dotlan.net/alliance/%s" % (
+            self.name.replace(" ", "_")
+        )
+
+
     @staticmethod
     def get_or_create(id):
         from capritools2.esi import ESI

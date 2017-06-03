@@ -5,5 +5,96 @@
 {% block active_localscan %}active{% endblock %}
 
 {% block content %}
-asd
+<div class="panel panel-primary">
+  <div class="panel-heading">
+    Total Characters:
+    <strong>{{ scan.characters.count }}</strong>
+
+    <span class="pull-right">
+      <strong>Created:</strong>
+      {{ scan.added|date:"d/m/y H:m" }} EVE Time
+    </span>
+  </div>
+
+  <div class="panel-body">
+    <div class="row">
+      <div class="col-lg-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <strong>Alliances ({{ alliances.count }})</strong>
+          </div>
+
+          <div class="panel-body scan-list">
+            <div class="row">
+              <table class="table table-striped table-hover">
+                {% for alliance in alliances %}
+                <tr>
+                  <td class="icon col-lg-1">
+                    <a href="{{ alliance.dotlan_link }}">
+                      <img class="logo" src="https://image.eveonline.com/Alliance/{{ alliance.id }}_64.png">
+                    </a>
+                  </td>
+
+                  <td>
+                    <span class="name">{{ alliance.name }}</span>
+                  </td>
+
+                  <td class="ticker">
+                    <span class="pull-right">[{{ alliance.ticker }}]</span>
+                  </td>
+
+                  <td>
+                    <span class="badge pull-right">
+                      {{ alliance.item_count }}
+                    </span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="panel panel-default">
+          <div class="panel-heading">
+            <strong>Corporations ({{ corps.count }})</strong>
+          </div>
+
+          <div class="panel-body scan-list">
+            <div class="row">
+              <table class="table table-striped table-hover">
+                {% for corp in corps %}
+                <tr>
+                  <td class="icon col-lg-1">
+                    <a href="{{ corp.dotlan_link }}">
+                      <img class="logo" src="https://image.eveonline.com/Corporation/{{ corp.id }}_64.png">
+                    </a>
+                  </td>
+
+                  <td>
+                    <span class="name">{{ corp.name }}</span>
+                  </td>
+
+                  <td class="ticker">
+                    <span class="pull-right">[{{ corp.ticker }}]</span>
+                  </td>
+
+                  <td>
+                    <span class="badge pull-right">
+                      {{ corp.item_count }}
+                    </span>
+                  </td>
+                </tr>
+                {% endfor %}
+              </table>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</div>
 {% endblock %}
