@@ -26,29 +26,40 @@ class DscanParser:
 
     # Parse a scan
     @transaction.atomic
-    def parse(self, raw):
-        self.scan = Dscan(key=random_key(7))
+    def parse(self, raw, oldFormat=False, key=random_key(7), added=None):
+        self.scan = Dscan(key=key)
+        if added != None:
+            self.scan.added = added
         self.scan.save()
         lines = raw.splitlines()
 
         objects = []
         for line in lines:
             # Regex parse the line
-            m = self.pattern.search(line)
+            if oldFormat == False:
+                m = self.pattern.search(line)
+            else:
+                m = None
+
             if m == None:
                 m = self.oldPattern.search(line)
                 if m != None:
                     m = m.groupdict()
-                    m['type_id'] = self.item_map[m['type_name']]
+
+                    type_name = m['type_name'].replace("*", "").replace('\xe2\x99\xa6 ', "")
+                    try:
+                        m['type_id'] = self.item_map[type_name]
+                    except KeyError:
+                        m = None
             else:
                 m = m.groupdict()
 
             if m != None:
                 # Parse the distance
                 if m['unit'] == "m":
-                    distance = atof(m['distance'].replace(",", ""))
+                    distance = atof(m['distance'].replace(".", ",").replace(",", ""))
                 elif m['unit'] == "km":
-                    distance = atof(m['distance'].replace(",", "")) * 1000
+                    distance = atof(m['distance'].replace(".", ",").replace(",", "")) * 1000
                 elif m['unit'] == "AU":
                     distance = atof(m['distance'].replace(",", "")) * 149597870700
                 else:

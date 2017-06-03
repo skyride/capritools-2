@@ -1,0 +1,19 @@
+{% extends 'capritools2/base.html' %}
+
+{% block title %}LSCAN{% endblock %}
+
+{% block content %}
+<h1>Localscan Paste Tool</h1>
+<p class="lead"></p>
+
+<form action="{% url 'localscan_submit' %}" method="post">
+  <fieldset>
+    {% csrf_token %}
+    <i><legend>Paste your local scan into the box below</legend></i>
+
+    <textarea name="scan" class="form-control" rows="8" placeholder="Local Scan"></textarea><br />
+
+    <input type="submit" class="btn btn-lg btn-primary">
+  </fieldset>
+</form>
+{% endblock %}

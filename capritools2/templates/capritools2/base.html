@@ -4,7 +4,7 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="{% static 'capritools2/css/theme-flatly.min.css' %}">
-    <title>CapriTools // {% block title %}{% endblock %}</title>
+    <title>{% block title_prefix %}CapriTools // {% endblock %}{% block title %}{% endblock %}</title>
   </head>
 
   <body>
@@ -25,6 +25,7 @@
         <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
           <ul class="nav navbar-nav" id="nav-list">
             <li class="{% block active_dscan %}{% endblock %}"><a href="{% url 'dscan' %}">Dscan</a></li>
+            <li class="{% block active_localscan %}{% endblock %}"><a href="{% url 'localscan' %}">Localscan</a></li>
           </ul>
 
           <ul class="nav navbar-nav navbar-right">
@@ -34,7 +35,7 @@
     </nav>
 
     <div class="container">
-      
+
 
       {% block content %}{% endblock %}
     </div>
