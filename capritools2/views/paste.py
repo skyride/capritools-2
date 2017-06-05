@@ -17,7 +17,7 @@ def paste_home(request):
 
 
 def paste_view(request, key):
-    #try:
+    try:
         paste = Paste.objects.get(
             Q(expires__isnull=True) | Q(expires__gt=datetime.now()),
             key=key
@@ -53,7 +53,7 @@ def paste_view(request, key):
             },
             request
         )
-    #except Exception:
+    except Exception:
         request.session['alert_type'] = "danger"
         request.session['alert_message'] = "The paste you were looking for does not exist."
         return redirect("paste")
@@ -61,6 +61,12 @@ def paste_view(request, key):
 
 def paste_submit(request):
     try:
+        text = request.POST.get("paste")
+        if len(text) == 0:
+            request.session['alert_type'] = "warning"
+            request.session['alert_message'] = "Cannot save a blank paste."
+            return redirect("paste")
+
         paste = Paste(
             key=random_key(7),
             text = request.POST.get("paste")
