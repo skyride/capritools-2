@@ -40,11 +40,15 @@ function highlightTypeOff(ids) {
   <div class="panel panel-primary">
     <div class="panel-heading">
       <strong>Location:</strong>
+      {% if scan.system %}
       <a href="{{ scan.system.dotlan_system }}">{{ scan.system.name }}</a>
       &lt;
       <a href="{{ scan.system.dotlan_constellation }}">{{ scan.system.constellation.name }}</a>
       &lt;
       <a href="{{ scan.system.dotlan_region }}">{{ scan.system.region.name }}</a>
+      {% else %}
+      Unknown
+      {% endif %}
 
       <span class="pull-right">
         <strong>Created:</strong>
