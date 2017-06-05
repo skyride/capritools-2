@@ -5,6 +5,13 @@ from django.template import RequestContext
 
 
 def render_page(template, data, request):
+    if "alert_type" in request.session:
+        data['alert_type'] = request.session['alert_type']
+        data['alert_message'] = request.session['alert_message']
+
+        del request.session['alert_type']
+        del request.session['alert_message']
+
     return render(request, template, data)
 
 

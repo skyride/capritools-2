@@ -3,6 +3,7 @@ import json
 from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.db.models import Count, Sum, Q
+from django.core.exceptions import ObjectDoesNotExist
 
 from capritools2.parsers.localscanparser import LocalScanParser
 from capritools2.stuff import render_page
@@ -18,7 +19,12 @@ def localscan_home(request):
 
 
 def localscan_view(request, key):
-    scan = LocalScan.objects.get(key=key)
+    try:
+        scan = LocalScan.objects.get(key=key)
+    except ObjectDoesNotExist:
+        request.session['alert_type'] = "danger"
+        request.session['alert_message'] = "The Local Scan you were looking for does not exist."
+        return redirect("localscan")
 
     affiliations = {}
     for affiliation in scan.affiliations.values('corporation', 'alliance'):
@@ -67,6 +73,9 @@ def localscan_view(request, key):
 
 def localscan_submit(request):
     parser = LocalScanParser()
-    status = parser.parse(request.POST.get("scan"))
-    if status == True:
-        return redirect("localscan_view", key=parser.scan.key)
+    if not parser.parse(request.POST.get("scan")):
+        request.session['alert_type'] = "danger"
+        request.session['alert_message'] = "Failed to parse Local Scan you entered."
+        return redirect("localscan")
+
+    return redirect("localscan_view", key=parser.scan.key)

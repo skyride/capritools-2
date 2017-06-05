@@ -35,7 +35,12 @@
     </nav>
 
     <div class="container">
-
+      {% if alert_type %}
+      <div class="alert alert-{{ alert_type }} alert-dismissible" role="alert">
+        {{ alert_message }}
+        <button type="button" class="close" data-dismiss="alert" aria-label="Close"><span aria-hidden="true">&times;</span></button>
+      </div>
+      {% endif %}
 
       {% block content %}{% endblock %}
     </div>

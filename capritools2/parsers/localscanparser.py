@@ -27,14 +27,17 @@ class LocalScanParser:
 
         # Hit the API for characterIDs
         affiliations = Set()
-        r = self.xmlapi.eve.CharacterID(names=input.replace("\r\n", ","))
+        try:
+            r = self.xmlapi.eve.CharacterID(names=input.replace("\r\n", ","))
+        except Exception:
+            return False
         ids = map(lambda x: x.characterID, r.characters)
 
         # Parse results
         added = 0
         charAffiliations = self.api.post("/characters/affiliation/", data=json.dumps(ids))
         if charAffiliations == None:
-            self.scan.save()
+            self.scan.delete()
             return False
 
         for i, affiliation in enumerate(charAffiliations):

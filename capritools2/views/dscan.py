@@ -2,6 +2,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect, reverse
 from django.db.models import Count, Sum, Q
 from django.conf import settings
+from django.core.exceptions import ObjectDoesNotExist
 
 from capritools2.models import Dscan, Group, Item
 from capritools2.stuff import render_page
@@ -17,7 +18,12 @@ def dscan_home(request):
 
 
 def dscan_view(request, key):
-    scan = Dscan.objects.get(key=key)
+    try:
+        scan = Dscan.objects.get(key=key)
+    except ObjectDoesNotExist:
+        request.session['alert_type'] = "danger"
+        request.session['alert_message'] = "The Dscan you were looking for does not exist."
+        return redirect("dscan")
 
     supers = [659, 30]
     capitals = [485, 547, 883, 1538] + supers
@@ -110,5 +116,10 @@ def dscan_view(request, key):
 
 def dscan_submit(request):
     parser = DscanParser()
-    parser.parse(request.POST.get("dscan"))
+
+    if not parser.parse(request.POST.get("dscan")):
+        request.session['alert_type'] = "danger"
+        request.session['alert_message'] = "Failed to parse Dscan you entered."
+        return redirect("dscan")
+
     return redirect("dscan_view", key=parser.scan.key)
