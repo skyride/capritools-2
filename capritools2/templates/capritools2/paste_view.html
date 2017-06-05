@@ -1,0 +1,21 @@
+{% extends 'capritools2/base.html' %}
+
+{% block title %}Pastebin // {{ paste.key }}{% endblock %}
+
+{% block active_paste %}active{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="col-xs-12">
+    <h4><span class="text-muted pull-right created">Created: {{ paste.added|date:"d/m/y H:i" }} EVE Time</span></h4>
+  </div>
+</div>
+
+<div class="row">
+  <div class="col-xs-12">
+    <div class="well well-sm">
+      {{ paste.text|linebreaks }}
+    </div>
+  </div>
+</div>
+{% endblock %}

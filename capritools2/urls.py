@@ -11,4 +11,8 @@ urlpatterns = [
     url(r'^local/$', views.localscan_home, name="localscan"),
     url(r'^local/submit/$', views.localscan_submit, name="localscan_submit"),
     url(r'^local/(?P<key>[a-zA-Z0-9]+)/$', views.localscan_view, name="localscan_view"),
+
+    url(r'^paste/$', views.paste_home, name="paste"),
+    url(r'^paste/submit$', views.paste_submit, name="paste_submit"),
+    url(r'^paste/(?P<key>[a-zA-Z0-9]+)/$', views.paste_view, name="paste_view"),
 ]

@@ -1,0 +1,44 @@
+{% extends 'capritools2/base.html' %}
+
+{% block title %}Pastebin{% endblock %}
+
+{% block active_paste %}active{% endblock %}
+
+{% block content %}
+<h1>Pastebin Tool</h1>
+
+<p class="lead">
+</p>
+
+<form action="{% url 'paste_submit' %}" method="post">
+  <fieldset>
+    {% csrf_token %}
+    <i><legend>Paste into the box below</legend></i>
+    <div class="form-group">
+      <textarea name="paste" class="form-control" rows="12"></textarea>
+    </div>
+
+    <div class="form-group">
+      <div class="input-group col-xs-4">
+        <div class="input-group-addon">Expiry</div>
+        <select name="expiry" class="form-control">
+          <option value="0" selected="selected">Never</option>
+          <option value="3600">An Hour</option>
+          <option value="86400">A Day</option>
+          <option value="604800">A Week</option>
+          <option value="2592000">A Month</option>
+          <option value="31536000">A Year</option>
+        </select>
+      </div>
+
+      <div class="input-group col-xs-4">
+        <input class="form-control" type="password" name="password" placeholder="Password">
+      </div>
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+    </div>
+  </fieldset>
+</form>
+{% endblock %}

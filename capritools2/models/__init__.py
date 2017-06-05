@@ -7,6 +7,9 @@ from localscan import *
 from localscanchar import *
 from affiliation import *
 
+# Pastebin
+from paste import *
+
 # Dynamic Data
 from character import *
 from corporation import *
