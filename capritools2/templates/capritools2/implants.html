@@ -1,0 +1,46 @@
+{% extends 'capritools2/base.html' %}
+
+{% load humanize %}
+
+{% block prefix_title %}Implant Sets{% endblock %}
+
+{% block active_quickmath %}active{% endblock %}
+
+{% block content %}
+<div class="row">
+  {% for set in sets %}
+  <div class="col-xs-4">
+    <div class="panel panel-primary">
+      <div class="panel-heading">
+        {{ set.name }}
+      </div>
+
+      <div class="panel-body scan-list">
+        <div class="row">
+          <table class="table table-striped table-hover">
+            <tbody>
+              {% for implant in set.implants %}
+              <tr>
+                <td><img class="implant-icon" src="https://image.eveonline.com/Type/{{ implant.id }}_32.png"></td>
+                <td>
+                  <a href="http://games.chruker.dk/eve_online/item.php?type_id={{ implant.id }}">
+                    {{ implant.implant_type }}
+                  </a>
+              </td>
+                <td>{{ implant.sell|intcomma }} ISK</td>
+              </tr>
+              {% endfor %}
+              <tr>
+                <td><img class="implant-icon" style="opacity: 0;" src="https://image.eveonline.com/Type/33516_32.png"></td>
+                <td><strong>Total:</strong></td>
+                <td><strong>{{ set.total|intcomma }} ISK</strong></td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+  {% endfor %}
+</div>
+{% endblock %}

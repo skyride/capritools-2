@@ -19,3 +19,11 @@ class Item(models.Model):
     buy = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     sell = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     last_updated = models.DateTimeField(null=True)
+
+
+    def implant_type(self):
+        return self.name.split(" ")[-1]
+
+
+    def __unicode__(self):
+        return "id=%s name='%s'" % (self.id, self.name)

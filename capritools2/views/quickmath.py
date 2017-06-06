@@ -1,6 +1,8 @@
 import json
+import re
 
 from django.shortcuts import redirect
+from django.db.models import Sum
 
 from capritools2.stuff import render_page
 from capritools2.models import Item
@@ -11,6 +13,52 @@ def quickmath_home(request):
     return render_page(
         "capritools2/quickmath.html",
         {},
+        request
+    )
+
+
+
+def quickmath_implants(request):
+    # Get the omega implants to identify the sets
+    omegas = Item.objects.filter(
+        name__iendswith="Omega",
+        name__icontains="-grade"
+    ).order_by(
+        'name'
+    ).all()
+
+    # Build set objects from the omega implants
+    order = {
+        "high": 1,
+        "mid": 2,
+        "low": 3
+    }
+    sets = []
+    pattern = re.compile(r"(\w+)-grade (\w+) omega")
+    for omega in omegas:
+        m = pattern.search(omega.name.lower())
+        sets.append({
+            "name": "%s-Grade %s Set" % (m.group(1).title(), m.group(2).title()),
+            "implants": [
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Alpha"),
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Beta"),
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Gamma"),
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Delta"),
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Epsilon"),
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Omega")
+            ],
+            'total': float(Item.objects.filter(name__istartswith=m.group(1), name__icontains=m.group(2)).aggregate(total=Sum('sell'))['total']),
+            'order': order[m.group(1)]
+        })
+
+    # Order the sets correctly
+    sets = sorted(sets, key=lambda x: x['order'])
+
+    return render_page(
+        "capritools2/implants.html",
+        {
+            'sets': sets
+        },
         request
     )
 

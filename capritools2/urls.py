@@ -18,4 +18,5 @@ urlpatterns = [
 
     url(r'^quickmath/$', views.quickmath_home, name="quickmath"),
     url(r'^quickmath/moongoo/$', views.quickmath_moongoo, name="moongoo"),
+    url(r'^quickmath/implants/$', views.quickmath_implants, name="implants"),
 ]
