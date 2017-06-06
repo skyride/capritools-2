@@ -36,193 +36,195 @@ function highlightTypeOff(ids) {
 {% endblock %}
 
 {% block content %}
-<div class="col-lg-12">
-  <div class="panel panel-primary">
-    <div class="panel-heading">
-      <strong>Location:</strong>
-      {% if scan.system %}
-      <a href="{{ scan.system.dotlan_system }}">{{ scan.system.name }}</a>
-      &lt;
-      <a href="{{ scan.system.dotlan_constellation }}">{{ scan.system.constellation.name }}</a>
-      &lt;
-      <a href="{{ scan.system.dotlan_region }}">{{ scan.system.region.name }}</a>
-      {% else %}
-      Unknown
-      {% endif %}
+<div class="row">
+  <div class="col-lg-12">
+    <div class="panel panel-default">
+      <div class="panel-heading">
+        <strong>Location:</strong>
+        {% if scan.system %}
+        <a href="{{ scan.system.dotlan_system }}">{{ scan.system.name }}</a>
+        &lt;
+        <a href="{{ scan.system.dotlan_constellation }}">{{ scan.system.constellation.name }}</a>
+        &lt;
+        <a href="{{ scan.system.dotlan_region }}">{{ scan.system.region.name }}</a>
+        {% else %}
+        Unknown
+        {% endif %}
 
-      <span class="pull-right">
-        <strong>Created:</strong>
-        {{ scan.added|date:"d/m/y H:i" }} EVE Time
-      </span>
-    </div>
+        <span class="pull-right">
+          <strong>Created:</strong>
+          {{ scan.added|date:"d/m/y H:i" }} EVE Time
+        </span>
+      </div>
 
-    <div class="panel-body">
-      <div class="row">
+      <div class="panel-body">
+        <div class="row">
 
-        <div class="col-sm-5">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <strong>Ships ({{ ship_count }})</strong>
-            </div>
-
-            <div class="panel-body scan-list">
-              <div class="row">
-                <table class="table table-striped table-hover">
-                  {% for ship in ships %}
-                  <tr id="type-{{ ship.id }}" id="group-{{ group.id }}" onmouseover="highlightGroupOn([{{ ship.group_id }}]);" onmouseout="highlightGroupOff([{{ ship.group_id }}]);">
-                    <td class="{{ ship.group_id|highlight }} col-lg-1 col-sm-2">
-                      <div align="center">
-                        <strong>{{ ship.ships }}</strong>
-                      </div>
-                    </td>
-
-                    <td>
-                      <strong>{{ ship.name }}</strong>
-                    </td>
-
-                    <td class="icon">
-                      <img class= "pull-right" src="//image.eveonline.com/render/{{ ship.id }}_32.png">
-                    </td>
-                  </tr>
-                  {% endfor %}
-                </table>
+          <div class="col-sm-5">
+            <div class="panel panel-default">
+              <div class="panel-heading">
+                <strong>Ships ({{ ship_count }})</strong>
               </div>
-            </div>
-          </div>
-        </div>
 
-        <div class="col-sm-7">
-          <div class="row">
-            <div class="col-lg-6">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <strong>Subcaps ({{ sub_count }})</strong>
-                </div>
+              <div class="panel-body scan-list">
+                <div class="row">
+                  <table class="table table-striped table-hover">
+                    {% for ship in ships %}
+                    <tr id="type-{{ ship.id }}" id="group-{{ group.id }}" onmouseover="highlightGroupOn([{{ ship.group_id }}]);" onmouseout="highlightGroupOff([{{ ship.group_id }}]);">
+                      <td class="{{ ship.group_id|highlight }} col-lg-1 col-sm-2">
+                        <div align="center">
+                          <strong>{{ ship.ships }}</strong>
+                        </div>
+                      </td>
 
-                <div class="panel-body scan-list">
-                  <div class="row">
-                    <table class="table table-striped table-hover">
-                      {% for group in subs %}
-                      <tr id="group-{{ group.id }}" onmouseover="highlightTypeOn({{ group.item_ids }});" onmouseout="highlightTypeOff({{ group.item_ids }});">
-                        <td class="{{ group.id|highlight }} col-lg-2 col-sm-2">
-                          <div align="center">
-                            <strong>{{ group.ships }}</strong>
-                          </div>
-                        </td>
+                      <td>
+                        <strong>{{ ship.name }}</strong>
+                      </td>
 
-                        <td>
-                          <strong>{{ group.name }}</strong>
-                        </td>
-                      </tr>
-                      {% endfor %}
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <strong>Capitals ({{ cap_count }})</strong>
-                </div>
-
-                <div class="panel-body scan-list">
-                  <div class="row">
-                    <table class="table table-striped table-hover">
-                      {% for group in caps %}
-                      <tr id="group-{{ group.id }}" onmouseover="highlightTypeOn({{ group.item_ids }});" onmouseout="highlightTypeOff({{ group.item_ids }});">
-                        <td class="{{ group.id|highlight }} col-sm-2">
-                          <div align="center">
-                            <strong>{{ group.ships }}</strong>
-                          </div>
-                        </td>
-
-                        <td>
-                          <strong>{{ group.name }}</strong>
-                        </td>
-                      </tr>
-                      {% endfor %}
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <strong>Misc</strong>
-                </div>
-
-                <div class="panel-body scan-list">
-                  <div class="row">
-                    <table class="table table-striped table-hover">
-                      {% for item in misc %}
-                      <tr id="type-{{ item.id }}">
-                        <td class="{{ item.id|highlight }} col-sm-2">
-                          <div align="center">
-                            <strong>{{ item.item_count }}</strong>
-                          </div>
-                        </td>
-
-                        <td>
-                          <strong>{{ item.name }}</strong>
-                        </td>
-                      </tr>
-                      {% endfor %}
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-6">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <strong>Structures</strong>
-                </div>
-
-                <div class="panel-body scan-list">
-                  <div class="row">
-                    <table class="table table-striped table-hover">
-                      {% for item in structures %}
-                      <tr id="type-{{ item.id }}">
-                        <td class="{{ item.id|highlight }} col-sm-2">
-                          <div align="center">
-                            <strong>{{ item.item_count }}</strong>
-                          </div>
-                        </td>
-
-                        <td>
-                          <strong>{{ item.name }}</strong>
-                        </td>
-                      </tr>
-                      {% endfor %}
-                    </table>
-                  </div>
-                </div>
-              </div>
-            </div>
-
-            <div class="col-lg-12">
-              <div class="panel panel-default">
-                <div class="panel-heading">
-                  <strong>Info</strong>
-                </div>
-
-                <div class="panel-body">
-                  <strong>Estimated Fleet Mass (excl. Supers):</strong> {{ info.total_mass|floatformat:0|intcomma }} kg <br />
-                  <strong>Estimated Fleet Volume (excl. Supers):</strong> {{ info.total_volume|floatformat:0|intcomma }} m3<br />
-                  <strong>Estimated Isotope Consumption to bridge 6ly (Titan):</strong> {{ info.titan_topes|floatformat:0|intcomma }}<br />
-                  <strong>Estimated Isotope Consumption to bridge 8ly (Blops):</strong> {{ info.blops_topes|floatformat:0|intcomma }}<br />
-
-                  <span class="text-muted"><i>Doesn't account for prop mods, modules or rigs</i></span>
+                      <td class="icon">
+                        <img class= "pull-right" src="//image.eveonline.com/render/{{ ship.id }}_32.png">
+                      </td>
+                    </tr>
+                    {% endfor %}
+                  </table>
                 </div>
               </div>
             </div>
           </div>
 
+          <div class="col-sm-7">
+            <div class="row">
+              <div class="col-lg-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <strong>Subcaps ({{ sub_count }})</strong>
+                  </div>
+
+                  <div class="panel-body scan-list">
+                    <div class="row">
+                      <table class="table table-striped table-hover">
+                        {% for group in subs %}
+                        <tr id="group-{{ group.id }}" onmouseover="highlightTypeOn({{ group.item_ids }});" onmouseout="highlightTypeOff({{ group.item_ids }});">
+                          <td class="{{ group.id|highlight }} col-lg-2 col-sm-2">
+                            <div align="center">
+                              <strong>{{ group.ships }}</strong>
+                            </div>
+                          </td>
+
+                          <td>
+                            <strong>{{ group.name }}</strong>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <strong>Capitals ({{ cap_count }})</strong>
+                  </div>
+
+                  <div class="panel-body scan-list">
+                    <div class="row">
+                      <table class="table table-striped table-hover">
+                        {% for group in caps %}
+                        <tr id="group-{{ group.id }}" onmouseover="highlightTypeOn({{ group.item_ids }});" onmouseout="highlightTypeOff({{ group.item_ids }});">
+                          <td class="{{ group.id|highlight }} col-sm-2">
+                            <div align="center">
+                              <strong>{{ group.ships }}</strong>
+                            </div>
+                          </td>
+
+                          <td>
+                            <strong>{{ group.name }}</strong>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <strong>Misc</strong>
+                  </div>
+
+                  <div class="panel-body scan-list">
+                    <div class="row">
+                      <table class="table table-striped table-hover">
+                        {% for item in misc %}
+                        <tr id="type-{{ item.id }}">
+                          <td class="{{ item.id|highlight }} col-sm-2">
+                            <div align="center">
+                              <strong>{{ item.item_count }}</strong>
+                            </div>
+                          </td>
+
+                          <td>
+                            <strong>{{ item.name }}</strong>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-6">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <strong>Structures</strong>
+                  </div>
+
+                  <div class="panel-body scan-list">
+                    <div class="row">
+                      <table class="table table-striped table-hover">
+                        {% for item in structures %}
+                        <tr id="type-{{ item.id }}">
+                          <td class="{{ item.id|highlight }} col-sm-2">
+                            <div align="center">
+                              <strong>{{ item.item_count }}</strong>
+                            </div>
+                          </td>
+
+                          <td>
+                            <strong>{{ item.name }}</strong>
+                          </td>
+                        </tr>
+                        {% endfor %}
+                      </table>
+                    </div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="col-lg-12">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <strong>Info</strong>
+                  </div>
+
+                  <div class="panel-body">
+                    <strong>Estimated Fleet Mass (excl. Supers):</strong> {{ info.total_mass|floatformat:0|intcomma }} kg <br />
+                    <strong>Estimated Fleet Volume (excl. Supers):</strong> {{ info.total_volume|floatformat:0|intcomma }} m3<br />
+                    <strong>Estimated Isotope Consumption to bridge 6ly (Titan):</strong> {{ info.titan_topes|floatformat:0|intcomma }}<br />
+                    <strong>Estimated Isotope Consumption to bridge 8ly (Blops):</strong> {{ info.blops_topes|floatformat:0|intcomma }}<br />
+
+                    <span class="text-muted"><i>Doesn't account for prop mods, modules or rigs</i></span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
         </div>
       </div>
     </div>

@@ -2,6 +2,7 @@ import random, string
 
 from django.shortcuts import render
 from django.template import RequestContext
+from django.conf import settings
 
 
 def render_page(template, data, request):
@@ -11,6 +12,12 @@ def render_page(template, data, request):
 
         del request.session['alert_type']
         del request.session['alert_message']
+
+    data['themes'] = settings.THEMES
+    if "theme" in request.session:
+        data['theme'] = request.session['theme']
+    else:
+        data['theme'] = settings.THEMES[0]
 
     return render(request, template, data)
 

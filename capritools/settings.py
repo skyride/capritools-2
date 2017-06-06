@@ -112,6 +112,13 @@ USE_TZ = True
 STATIC_ROOT = os.path.join(_PATH, 'static')
 STATIC_URL = '/static/'
 
+# ESI
+ESI_URL = "https://esi.tech.ccp.is/latest"
+ESI_DATASOURCE = "tranquility"
+ESI_RETRIES = 15
+
+PRICE_URL = "https://api.eve-central.com/api/marketstat/json?regionlimit=10000002&typeid=%s"
+
 # load local settings
 from local_settings import *  # NOPEP8
 
@@ -142,13 +149,15 @@ DSCAN_HIGHLIGHTS = {
 
 DSCAN_MISC_GROUPS = [548, 361, 1246, 1276, 1275, 1249]
 
-
-# ESI
-ESI_URL = "https://esi.tech.ccp.is/latest"
-ESI_DATASOURCE = "tranquility"
-ESI_RETRIES = 15
-
-PRICE_URL = "https://api.eve-central.com/api/marketstat/json?regionlimit=10000002&typeid=%s"
+THEMES = [
+    "flatly",
+    "darkly",
+    "cyborg",
+    "lumen",
+    "slate",
+    "solar",
+    "yeti"
+]
 
 # Celery
 CELERY_APP_NAME = "capritools2"

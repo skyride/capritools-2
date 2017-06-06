@@ -2,7 +2,7 @@
 
 {% load humanize %}
 
-{% block prefix_title %}Implant Sets{% endblock %}
+{% block title %}Implant Sets{% endblock %}
 
 {% block active_quickmath %}active{% endblock %}
 
@@ -10,7 +10,7 @@
 <div class="row">
   {% for set in sets %}
   <div class="col-xs-4">
-    <div class="panel panel-primary">
+    <div class="panel panel-default">
       <div class="panel-heading">
         {{ set.name }}
       </div>
