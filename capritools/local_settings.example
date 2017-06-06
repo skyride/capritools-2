@@ -26,3 +26,7 @@ DATABASES = {
 
 
 OLD_SCANS_ROOT = "/home/skyride/capritools/scans/"
+
+
+SOCIAL_AUTH_EVEONLINE_KEY = ""
+SOCIAL_AUTH_EVEONLINE_SECRET = ""

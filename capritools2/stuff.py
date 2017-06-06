@@ -4,6 +4,8 @@ from django.shortcuts import render
 from django.template import RequestContext
 from django.conf import settings
 
+from social_django.models import UserSocialAuth
+
 
 def render_page(template, data, request):
     if "alert_type" in request.session:
@@ -18,6 +20,11 @@ def render_page(template, data, request):
         data['theme'] = request.session['theme']
     else:
         data['theme'] = settings.THEMES[0]
+
+    try:
+        data['social'] = request.user.social_auth.get(provider="eveonline")
+    except Exception:
+        data['social'] = None
 
     return render(request, template, data)
 

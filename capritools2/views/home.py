@@ -2,6 +2,7 @@ from base64 import b64decode
 
 from django.http import HttpResponse
 from django.shortcuts import redirect
+from django.contrib.auth import logout
 
 from capritools2.stuff import render_page
 

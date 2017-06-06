@@ -1,10 +1,14 @@
+from base64 import b64decode
+
 from django.conf.urls import url
+from django.contrib.auth.views import logout
 
 from . import views
 
 urlpatterns = [
     url(r'^$', views.home, name="home"),
-    url(r'theme/(?P<theme>[a-zA-Z0-9]+)/(?P<ret>.+)/$', views.theme_submit, name="theme"),
+    url(r'^theme/(?P<theme>[a-zA-Z0-9]+)/(?P<ret>.+)/$', views.theme_submit, name="theme"),
+    url(r'^logout/$', logout, {'next_page': "/"}, name="logout"),
 
     url(r'^dscan/$', views.dscan_home, name="dscan"),
     url(r'^dscan/submit/$', views.dscan_submit, name="dscan_submit"),

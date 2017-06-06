@@ -40,7 +40,26 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.humanize',
     'capritools2',
+    'social_django',
 ]
+
+AUTHENTICATION_BACKENDS = (
+
+    'django.contrib.auth.backends.ModelBackend',
+    'social_core.backends.eveonline.EVEOnlineOAuth2',
+)
+
+SOCIAL_AUTH_PIPELINE = (
+    'social_core.pipeline.social_auth.social_details',
+    'social_core.pipeline.social_auth.social_uid',
+    'social_core.pipeline.social_auth.social_user',
+    'social_core.pipeline.user.get_username',
+    'social_core.pipeline.user.create_user',
+    'social_core.pipeline.social_auth.associate_user',
+    'social_core.pipeline.social_auth.load_extra_data',
+    'social_core.pipeline.user.user_details',
+    'social_core.pipeline.social_auth.associate_by_email',
+)
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -65,6 +84,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'social_django.context_processors.backends',
+                'social_django.context_processors.login_redirect',
             ],
         },
     },
@@ -116,6 +137,14 @@ STATIC_URL = '/static/'
 ESI_URL = "https://esi.tech.ccp.is/latest"
 ESI_DATASOURCE = "tranquility"
 ESI_RETRIES = 15
+
+SOCIAL_AUTH_LOGIN_REDIRECT_URL = '/'
+SOCIAL_AUTH_CLEAN_USERNAMES = True
+SOCIAL_AUTH_EVEONLINE_SCOPE = [
+  "publicData",
+  "esi-fleets.read_fleet.v1",
+  "esi-fleets.write_fleet.v1"
+]
 
 PRICE_URL = "https://api.eve-central.com/api/marketstat/json?regionlimit=10000002&typeid=%s"
 
