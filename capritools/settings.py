@@ -147,3 +147,26 @@ DSCAN_MISC_GROUPS = [548, 361, 1246, 1276, 1275, 1249]
 ESI_URL = "https://esi.tech.ccp.is/latest"
 ESI_DATASOURCE = "tranquility"
 ESI_RETRIES = 15
+
+PRICE_URL = "https://api.eve-central.com/api/marketstat/json?regionlimit=10000002&typeid=%s"
+
+# Celery
+CELERY_APP_NAME = "capritools2"
+BROKER_URL = "redis://127.0.0.1:6379/"
+
+CELERY_DISABLE_RATE_LIMITS = True
+CELERYD_TASK_SOFT_TIME_LIMIT = 300
+CELERYD_PREFETCH_MULTIPLIER = 1
+CELERY_IGNORE_RESULT = True
+CELERY_STORE_ERRORS_EVEN_IF_IGNORED = True
+
+# Periodic tasks
+from datetime import timedelta
+
+CELERYBEAT_SCHEDULE = {
+    # Spawns market update tasks
+    'price_update_spawner': {
+        'task': 'price_update_spawner',
+        'schedule': timedelta(minutes=2)
+    }
+}

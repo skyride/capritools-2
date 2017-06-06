@@ -3,6 +3,7 @@ from django.db import models
 from group import Group
 from marketgroup import MarketGroup
 
+
 class Item(models.Model):
     id = models.IntegerField(primary_key=True)
     group = models.ForeignKey(Group, related_name="items")
@@ -15,3 +16,6 @@ class Item(models.Model):
     published = models.BooleanField()
     marketGroup = models.ForeignKey(MarketGroup, null=True)
     icon = models.IntegerField(null=True)
+    buy = models.DecimalField(max_digits=16, decimal_places=2, default=0)
+    sell = models.DecimalField(max_digits=16, decimal_places=2, default=0)
+    last_updated = models.DateTimeField(null=True)
