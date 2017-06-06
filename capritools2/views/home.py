@@ -1,3 +1,5 @@
+from base64 import b64decode
+
 from django.http import HttpResponse
 from django.shortcuts import redirect
 
@@ -14,4 +16,4 @@ def home(request):
 
 def theme_submit(request, theme, ret):
     request.session['theme'] = theme
-    return redirect(ret)
+    return redirect(b64decode(ret))

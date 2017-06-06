@@ -1,5 +1,6 @@
 from django import template
 from django.conf import settings
+from base64 import b64encode
 
 
 register = template.Library()
@@ -11,4 +12,9 @@ def highlight(value):
         return "active"
 
 
+def b64(value):
+    return b64encode(value)
+
+
 register.filter('highlight', highlight)
+register.filter('b64', b64)
