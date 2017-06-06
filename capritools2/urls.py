@@ -15,4 +15,7 @@ urlpatterns = [
     url(r'^paste/$', views.paste_home, name="paste"),
     url(r'^paste/submit$', views.paste_submit, name="paste_submit"),
     url(r'^paste/(?P<key>[a-zA-Z0-9]+)/$', views.paste_view, name="paste_view"),
+
+    url(r'^quickmath/$', views.quickmath_home, name="quickmath"),
+    url(r'^quickmath/moongoo/$', views.quickmath_moongoo, name="moongoo"),
 ]

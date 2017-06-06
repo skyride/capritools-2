@@ -1,0 +1,113 @@
+{% extends 'capritools2/base.html' %}
+{% load static %}
+
+{% block title %}Moon Goo Profitability{% endblock %}
+
+{% block active_quickmath %}active{% endblock %}
+
+
+{% block extra_script %}
+<script src="{% static 'capritools2/js/angular.min.js' %}"></script>
+<script src="{% static 'capritools2/js/numeral.min.js' %}"></script>
+<script src="{% static 'capritools2/js/moongoo.js' %}"></script>
+{% endblock %}
+
+
+{% block content %}
+{% autoescape off %}
+<script type="application/javascript">
+  var minerals = {{ minerals }};
+  var towers = {{ towers }};
+  var blocks = {{ blocks }};
+</script>
+{% endautoescape %}
+
+{% verbatim %}
+<div id="app" ng-app="myApp" ng-controller="myCtrl">
+  <h1>Moon Goo Profitability</h1>
+
+  <select name="towertype" class="pull-left" ng-model="active">
+    <option ng-repeat="tower in towers" value="{{tower.id}}">{{tower.name}}</option>
+  </select>
+
+  <span class="pull-left" style="margin-left: 10px;"><input type="checkbox" ng-model="sovbonus"> Sov Fuel Bonus</span>
+
+  <hr />
+
+  <div class="well well-sm" style="height: 136px;">
+    <div class="col-md-1">
+      <img class="pull-right" ng-src="https://image.eveonline.com/Type/{{activeTower().id}}_64.png">
+    </div>
+
+    <div class="col-md-11">
+      <div>
+        <h3 style="margin-top: 0px; margin-bottom: 4px;">{{activeTower().fullName}}</h3>
+        <ul style="list-style-type: none; padding: 0px; margin: 0px;">
+          <li><b>Cost (Sell):</b> {{isk(activeTower().sell)}}</li>
+          <li><b>Hourly Usage:</b> {{getUsage(activeTower().usage)}} blocks ({{getUsage(activeTower().usage) * 5}} m3)</li>
+          <li><b>Weekly Usage:</b> {{getUsage(activeTower().usage) * 24 * 7}} blocks ({{getUsage(activeTower().usage) * 5 * 24 * 7}} m3)</li>
+          <li><b>Monthly Usage:</b> {{getUsage(activeTower().usage) * 24 * 30}} blocks ({{getUsage(activeTower().usage) * 5 * 24 * 30}} m3)</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+
+    <table class="table table-striped table-hover" id="minerals">
+      <thead>
+        <tr>
+          <th width="30"></th>
+          <th></th>
+          <th>Mineral</th>
+          <th class="text-right">Sell (per unit)</th>
+          <th class="text-right">Income</th>
+          <th class="text-right">Fuel Cost</th>
+          <th class="text-right">Profit</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr ng-repeat="mineral in minerals">
+          <td class="r{{mineral.class}}" align="center" width="30"><strong><span class="rtype">R{{mineral.class}}</span></strong></td>
+          <td style="background: url('https://image.eveonline.com/Type/{{mineral.id}}_32.png') no-repeat 4px 4px; width: 32px;">&nbsp</td>
+          <td><a class="mineral-link" style="text-decoration: none;" href="https://eve-central.com/home/quicklook.html?typeid={{mineral.id}}">{{mineral.name}}</a></td>
+          <td align="right">{{isk(mineral.sell)}}</td>
+          <td align="right">{{isk(income(mineral.sell))}}</td>
+          <td align="right">{{isk(getFuelCost())}}</td>
+          <td align="right" class="{{profitClass(income(mineral.sell) - getFuelCost())}}">{{isk(income(mineral.sell) - getFuelCost())}}</td>
+        </tr>
+      </tbody>
+    </table>
+
+    <hr />
+
+    <div>
+      <table class="table table-striped table-hover" id="fuel">
+        <thead>
+          <tr>
+            <th>&nbsp</th>
+            <th>Fuel Blocks</th>
+            <th class="text-right">Sell (per unit)</th>
+            <th class="text-right">Buy (per unit)</th>
+            <th class="text-right">10</th>
+            <th class="text-right">20</th>
+            <th class="text-right">40</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr ng-repeat="block in blocks">
+            <td style="background: url('https://image.eveonline.com/Type/{{block.id}}_32.png') no-repeat 4px 4px; width: 42px;">&nbsp</td>
+            <td>{{block.name}}</td>
+            <td class="text-right">{{isk(block.sell)}}</td>
+            <td class="text-right">{{isk(block.buy)}}</td>
+            <td class="text-right">{{isk(block.sell * 10)}}</td>
+            <td class="text-right">{{isk(block.sell * 20)}}</td>
+            <td class="text-right">{{isk(block.sell * 40)}}</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+    <h6><i>* All figures based on 30 day month unless stated otherwise</i></h6>
+    <h6><i>** All figures calculated using 5th percentile sell price from <a href="https://eve-central.com/">eve-central</a></i></h6>
+</div>
+{% endverbatim %}
+
+{% endblock %}
