@@ -3,6 +3,7 @@ import re
 
 from django.shortcuts import redirect
 from django.db.models import Sum
+from django.core.cache import cache
 
 from capritools2.stuff import render_page
 from capritools2.models import Item
@@ -19,6 +20,16 @@ def quickmath_home(request):
 
 
 def quickmath_implants(request):
+    # Check the cache
+    if "quickmath_implants" in cache:
+        return render_page(
+            "capritools2/implants.html",
+            {
+                'sets': cache.get("quickmath_implants")
+            },
+            request
+        )
+
     # Get the omega implants to identify the sets
     omegas = Item.objects.filter(
         name__iendswith="Omega",
@@ -53,6 +64,9 @@ def quickmath_implants(request):
 
     # Order the sets correctly
     sets = sorted(sets, key=lambda x: x['order'])
+
+    # Cache the results
+    cache.set('quickmath_implants', sets, 3600 * 12)
 
     return render_page(
         "capritools2/implants.html",
