@@ -84,6 +84,9 @@ def paste_submit(request):
             # Add it to their session so they aren't immedately prompted for it
             request.session['paste_'+paste.key] = True
 
+        if request.user.is_authenticated():
+            paste.user = request.user
+
         paste.save()
         return redirect("paste_view", key=paste.key)
 

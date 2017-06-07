@@ -78,4 +78,8 @@ def localscan_submit(request):
         request.session['alert_message'] = "Failed to parse Local Scan you entered."
         return redirect("localscan")
 
+    if request.user.is_authenticated():
+        parser.scan.user = request.user
+        parser.scan.save()
+
     return redirect("localscan_view", key=parser.scan.key)

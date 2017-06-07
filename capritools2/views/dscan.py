@@ -123,4 +123,8 @@ def dscan_submit(request):
         request.session['alert_message'] = "Failed to parse Dscan you entered."
         return redirect("dscan")
 
+    if request.user.is_authenticated():
+        parser.scan.user = request.user
+        parser.scan.save()
+
     return redirect("dscan_view", key=parser.scan.key)
