@@ -41,8 +41,9 @@ def dscan_view(request, key):
     )
 
     # Calculate bridge usage
-    info['titan_topes'] = info['total_mass'] * 1500 * 0.000000001 * 0.6 * 6
-    info['blops_topes'] = info['total_mass'] * 450 * 0.000000135 * 0.6 * 8
+    if info['total_mass'] != None:
+        info['titan_topes'] = info['total_mass'] * 1500 * 0.000000001 * 0.6 * 6
+        info['blops_topes'] = info['total_mass'] * 450 * 0.000000135 * 0.6 * 8
 
     return render_page(
         "capritools2/dscan_view.html",
