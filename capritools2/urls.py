@@ -10,6 +10,8 @@ urlpatterns = [
     url(r'^theme/(?P<theme>[a-zA-Z0-9]+)/(?P<ret>.+)/$', views.theme_submit, name="theme"),
     url(r'^logout/$', logout, {'next_page': "/"}, name="logout"),
 
+    url(r'^account/scans/$', views.account_scans, name="account_scans"),
+
     url(r'^dscan/$', views.dscan_home, name="dscan"),
     url(r'^dscan/submit/$', views.dscan_submit, name="dscan_submit"),
     url(r'^dscan/(?P<key>[a-zA-Z0-9]+)/$', views.dscan_view, name="dscan_view"),

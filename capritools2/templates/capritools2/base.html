@@ -42,6 +42,8 @@
                 {{ user.first_name }} {{ user.last_name }} <span class="caret">
               </a>
               <ul class="dropdown-menu">
+                <li><a href="{% url 'account_scans' %}">My Scans</a></li>
+                <li role="separator" class="divider"></li>
                 <li><a href="{% url 'logout' %}">Logout</a></li>
               </ul>
             </li>
