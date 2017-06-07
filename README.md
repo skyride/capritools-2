@@ -43,4 +43,6 @@ python import.py
 #### Celery
 We use Celery as a backend to get prices and eventually do fleet tracking. Running this command in a screen session should do the job.
 
-`celery worker -A capritools -B -c 4`
+```
+celery worker -A capritools -B -c 4
+```

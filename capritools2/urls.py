@@ -11,6 +11,9 @@ urlpatterns = [
     url(r'^logout/$', logout, {'next_page': "/"}, name="logout"),
 
     url(r'^account/scans/$', views.account_scans, name="account_scans"),
+    url(r'^account/delete/dscan/(?P<key>[a-zA-Z0-9]+)/$', views.account_delete_dscan, name="account_delete_dscan"),
+    url(r'^account/delete/local/(?P<key>[a-zA-Z0-9]+)/$', views.account_delete_localscan, name="account_delete_localscan"),
+    url(r'^account/delete/paste/(?P<key>[a-zA-Z0-9]+)/$', views.account_delete_paste, name="account_delete_paste"),
 
     url(r'^dscan/$', views.dscan_home, name="dscan"),
     url(r'^dscan/submit/$', views.dscan_submit, name="dscan_submit"),

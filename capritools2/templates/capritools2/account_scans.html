@@ -22,6 +22,7 @@
           <th>Ships</th>
           <th>Structures</th>
           <th>Added</th>
+          <th></th>
         </tr>
       </thead>
 
@@ -43,6 +44,9 @@
           <td>{{ scan.ships|intcomma }}</td>
           <td>{{ scan.structures|intcomma }}</td>
           <td>{{ scan.added|date:"d/m/y H:i" }}</td>
+          <td>
+            <a href="{% url 'account_delete_dscan' scan.key %}" class="btn btn-xs btn-danger">Delete</a>
+          </td>
         </tr>
         {% endfor %}
       </tbody>
@@ -57,6 +61,7 @@
           <th>System</th>
           <th>Characters</th>
           <th>Added</th>
+          <th></th>
         </tr>
       </thead>
 
@@ -77,6 +82,7 @@
           </td>
           <td>{{ scan.chars|intcomma }}</td>
           <td>{{ scan.added|date:"d/m/y H:i" }}</td>
+          <td><a href="{% url 'account_delete_localscan' scan.key %}" class="btn btn-xs btn-danger">Delete</a></td>
         </tr>
         {% endfor %}
       </tbody>
@@ -92,6 +98,7 @@
           <th>Password?</th>
           <th>Expires</th>
           <th>Added</th>
+          <th></th>
         </tr>
       </thead>
 
@@ -119,6 +126,7 @@
             {% endif %}
           </td>
           <td>{{ paste.added|date:"d/m/y H:i" }}</td>
+          <td><a href="{% url 'account_delete_paste' paste.key %}" class="btn btn-xs btn-danger">Delete</a></td>
         </tr>
         {% endfor %}
       </tbody>
