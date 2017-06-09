@@ -21,19 +21,20 @@ def quickmath_home(request):
 
 def quickmath_implants(request):
     # Check the cache
-    if "quickmath_implants" in cache:
-        return render_page(
-            "capritools2/implants.html",
-            {
-                'sets': cache.get("quickmath_implants")
-            },
-            request
-        )
+    # if "quickmath_implants" in cache:
+    #     return render_page(
+    #         "capritools2/implants.html",
+    #         {
+    #             'sets': cache.get("quickmath_implants")
+    #         },
+    #         request
+    #     )
 
     # Get the omega implants to identify the sets
     omegas = Item.objects.filter(
         name__iendswith="Omega",
-        name__icontains="-grade"
+        name__icontains="-grade",
+        group_id=300
     ).order_by(
         'name'
     ).all()
@@ -51,14 +52,14 @@ def quickmath_implants(request):
         sets.append({
             "name": "%s-Grade %s Set" % (m.group(1).title(), m.group(2).title()),
             "implants": [
-                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Alpha"),
-                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Beta"),
-                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Gamma"),
-                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Delta"),
-                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Epsilon"),
-                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Omega")
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Alpha", group_id=300),
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Beta", group_id=300),
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Gamma", group_id=300),
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Delta", group_id=300),
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Epsilon", group_id=300),
+                Item.objects.get(name__istartswith=m.group(1), name__icontains=m.group(2), name__iendswith="Omega", group_id=300)
             ],
-            'total': float(Item.objects.filter(name__istartswith=m.group(1), name__icontains=m.group(2)).aggregate(total=Sum('sell'))['total']),
+            'total': float(Item.objects.filter(name__istartswith=m.group(1), name__icontains=m.group(2), group_id=300).aggregate(total=Sum('sell'))['total']),
             'order': order[m.group(1)]
         })
 
@@ -66,7 +67,7 @@ def quickmath_implants(request):
     sets = sorted(sets, key=lambda x: x['order'])
 
     # Cache the results
-    cache.set('quickmath_implants', sets, 3600 * 12)
+    #cache.set('quickmath_implants', sets, 3600 * 12)
 
     return render_page(
         "capritools2/implants.html",
