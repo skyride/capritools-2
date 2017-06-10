@@ -26,7 +26,7 @@
               <table class="table table-striped table-hover">
                 <tr>
                   {% if fleet.fleet_command %}
-                  <td class="fleet-command"><strong>Fleet ({{ fleet.members.count }}):</strong> {{ fleet.fleet_command.name }} {{ fleet.fleet_command.fleet_boss }}</td>
+                  <td class="fleet-command"><strong>Fleet ({{ fleet.members.count }}):</strong>{{ fleet.fleet_command.name }} {{ fleet.fleet_command.fleet_boss }}</td>
                   <td class="ship"><span class="{{ fleet.fleet_command.ship.group_class }}">{{ fleet.fleet_command.ship.name }}</span></td>
                   {% else %}
                   <td class="fleet-command"><Strong>Fleet ({{ fleet.members.count }}):</strong> <i>None</i></td>

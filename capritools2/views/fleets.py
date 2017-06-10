@@ -59,6 +59,8 @@ def fleet_scan_view(request, key):
                         id__in=capitals
                     ).annotate(
                         ships=Count('items')
+                    ).order_by(
+                        '-ships'
                     ).all(),
 
                 'cap_count': fleet.members.filter(
@@ -71,24 +73,32 @@ def fleet_scan_view(request, key):
                         id__in=capitals
                     ).annotate(
                         ships=Count('items')
+                    ).order_by(
+                        '-ships'
                     ).all(),
 
                 'alliances': Alliance.objects.filter(
                     fleetMembers__scan=fleet
                 ).annotate(
                     members=Count('fleetMembers')
+                ).order_by(
+                    '-members'
                 ).all(),
 
                 'corps': Corporation.objects.filter(
                     fleetMembers__scan=fleet
                 ).annotate(
                     members=Count('fleetMembers')
+                ).order_by(
+                    '-members'
                 ).all(),
 
                 'systems': System.objects.filter(
                     fleetMembers__scan=fleet
                 ).annotate(
                     members=Count('fleetMembers')
+                ).order_by(
+                    '-members'
                 ).all()
             },
             request
