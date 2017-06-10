@@ -16,7 +16,7 @@ class Faction(models.Model):
             factions = api.get("/universe/factions/")
             faction = filter(lambda x: x['faction_id'] == id, factions)[0]
             faction = Faction(
-                id=faction['id'],
+                id=faction['faction_id'],
                 name=faction['name']
             )
             faction.save()

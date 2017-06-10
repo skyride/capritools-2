@@ -6,7 +6,7 @@ from django.db import models
 class Alliance(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=64)
-    ticker = models.CharField(max_length=5)
+    ticker = models.CharField(max_length=5, null=True, default=None, db_index=True)
 
 
     def dotlan_link(self):
@@ -23,8 +23,16 @@ class Alliance(models.Model):
 
 
     @staticmethod
-    def get_or_create(id):
+    def get_or_create(id, name=None):
         from capritools2.esi import ESI
+
+        if name != None:
+            alliance = Alliance(
+                id=id,
+                name=name
+            )
+            alliance.save()
+            return alliance
 
         alliance = Alliance.objects.filter(id=id)
         if alliance.count() == 0:

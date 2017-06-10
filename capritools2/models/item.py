@@ -1,4 +1,5 @@
 from django.db import models
+from django.conf import settings
 
 from group import Group
 from marketgroup import MarketGroup
@@ -23,6 +24,11 @@ class Item(models.Model):
 
     def implant_type(self):
         return self.name.split(" ")[-1]
+
+
+    def group_class(self):
+        if self.group_id in settings.DSCAN_HIGHLIGHTS:
+            return "text-%s" % settings.DSCAN_HIGHLIGHTS[self.group_id]
 
 
     def __unicode__(self):

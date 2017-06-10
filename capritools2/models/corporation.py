@@ -6,7 +6,7 @@ from django.db import models
 class Corporation(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=64)
-    ticker = models.CharField(max_length=5)
+    ticker = models.CharField(max_length=5, null=True, default=None, db_index=True)
 
 
     def dotlan_link(self):
@@ -23,11 +23,19 @@ class Corporation(models.Model):
 
 
     @staticmethod
-    def get_or_create(id):
+    def get_or_create(id, name=None):
         from capritools2.esi import ESI
 
         corporation = Corporation.objects.filter(id=id)
         if corporation.count() == 0:
+            if name != None:
+                corporation = Corporation(
+                    id=id,
+                    name=name
+                )
+                corporation.save()
+                return corporation
+
             api = ESI()
             r = api.get("/corporations/%s/" % id)
             corporation = Corporation(

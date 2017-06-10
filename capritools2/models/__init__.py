@@ -10,6 +10,12 @@ from affiliation import *
 # Pastebin
 from paste import *
 
+# Fleet Scan
+from fleetscan import *
+from fleetwing import *
+from fleetsquad import *
+from fleetmember import *
+
 # Dynamic Data
 from character import *
 from corporation import *

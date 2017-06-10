@@ -19,7 +19,6 @@ class LocalScanParser:
         self.xmlapi = eveapi.EVEAPIConnection()
 
 
-    @transaction.atomic
     def parse(self, input):
         # Create initial anchor key
         self.scan = LocalScan(key=random_key(7))
@@ -27,15 +26,18 @@ class LocalScanParser:
 
         # Hit the API for characterIDs
         affiliations = Set()
+        charAffiliations = []
+        names=input.split("\r\n")
         try:
-            r = self.xmlapi.eve.CharacterID(names=input.replace("\r\n", ","))
+            for chunk in [names[x:x+100] for x in xrange(0, len(names), 100)]:
+                r = self.xmlapi.eve.CharacterID(names=",".join(chunk))
+                ids = map(lambda x: x.characterID, r.characters)
+                charAffiliations = charAffiliations + self.api.post("/characters/affiliation/", data=json.dumps(ids))
         except Exception:
             return False
-        ids = map(lambda x: x.characterID, r.characters)
 
         # Parse results
         added = 0
-        charAffiliations = self.api.post("/characters/affiliation/", data=json.dumps(ids))
         if charAffiliations == None:
             self.scan.delete()
             return False

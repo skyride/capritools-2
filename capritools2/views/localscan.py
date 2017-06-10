@@ -4,6 +4,7 @@ from django.http import HttpResponse
 from django.shortcuts import redirect
 from django.db.models import Count, Sum, Q
 from django.core.exceptions import ObjectDoesNotExist
+from django.core.cache import cache
 
 from capritools2.parsers.localscanparser import LocalScanParser
 from capritools2.stuff import render_page
@@ -25,6 +26,16 @@ def localscan_view(request, key):
         request.session['alert_type'] = "danger"
         request.session['alert_message'] = "The Local Scan you were looking for does not exist."
         return redirect("localscan")
+
+    # Check the cache
+    if "localscan_%s" % key in cache:
+        data = cache.get("localscan_%s" % key)
+        return render_page(
+            "capritools2/localscan_view.html",
+            data,
+            request
+        )
+
 
     affiliations = {}
     for affiliation in scan.affiliations.values('corporation', 'alliance'):
@@ -58,14 +69,19 @@ def localscan_view(request, key):
         corp.style = ['info', 'success', 'warning', 'danger'][i % 4]
         corp.width = (float(100) / scan.characters.count()) * corp.item_count
 
+    data = {
+        'scan': scan,
+        'alliances': alliances,
+        'corps': corps,
+        'affiliations': json.dumps(affiliations)
+    }
+
+    # Cache the object
+    cache.set("localscan_%s" % key, data, 3600 * 12)
+
     return render_page(
         "capritools2/localscan_view.html",
-        {
-            'scan': scan,
-            'alliances': alliances,
-            'corps': corps,
-            'affiliations': json.dumps(affiliations)
-        },
+        data,
         request
     )
 
