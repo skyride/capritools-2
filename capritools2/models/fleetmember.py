@@ -33,5 +33,9 @@ class FleetMember(models.Model):
             return ""
 
 
+    def fleet_skills(self):
+        return "%s - %s - %s" % (self.fleet_command, self.wing_command, self.leadership)
+
+
     class Meta:
         ordering = ['wing', 'squad', 'command', 'name']

@@ -7,6 +7,59 @@
 
 {% block active_fleets %}active{% endblock %}
 
+{% block extra_js %}
+var shown = "glyphicon-menu-down";
+var hidden = "glyphicon-menu-right";
+
+function toggleFleet(id) {
+  if($('.fleet-glyph-'+id).hasClass(shown)) {
+    hideFleet(id);
+  } else {
+    showFleet(id);
+  }
+}
+function hideFleet(id) {
+  $(".fleet-"+id).addClass("hide-fleet");
+  $(".fleet-glyph-"+id).removeClass(shown).addClass(hidden);
+}
+function showFleet(id) {
+  $(".fleet-"+id).removeClass("hide-fleet");
+  $(".fleet-glyph-"+id).removeClass(hidden).addClass(shown);
+}
+
+function toggleWing(id) {
+  if($(".wing-glyph-"+id).hasClass(shown)) {
+    hideWing(id);
+  } else {
+    showWing(id);
+  }
+}
+function hideWing(id) {
+  $(".wing-"+id).addClass("hide-wing");
+  $(".wing-glyph-"+id).removeClass(shown).addClass(hidden);
+}
+function showWing(id) {
+  $(".wing-"+id).removeClass("hide-wing");
+  $(".wing-glyph-"+id).removeClass(hidden).addClass(shown);
+}
+
+function toggleSquad(id) {
+  if($(".squad-glyph-"+id).hasClass(shown)) {
+    hideSquad(id);
+  } else {
+    showSquad(id);
+  }
+}
+function hideSquad(id) {
+  $(".squad-"+id).addClass("hide-squad");
+  $(".squad-glyph-"+id).removeClass(shown).addClass(hidden);
+}
+function showSquad(id) {
+  $(".squad-"+id).removeClass("hide-squad");
+  $(".squad-glyph-"+id).removeClass(hidden).addClass(shown);
+}
+{% endblock %}
+
 {% block content %}
 <div class="panel panel-default">
   <div class="panel-heading">
@@ -21,42 +74,65 @@
     <div class="row">
       <div class="col-md-5">
         <div class="panel panel-default">
-          <div class="panel-body scan-list fleet-scan">
+          <div class="panel-body scan-list fleet-list">
             <div class="row">
               <table class="table table-striped table-hover">
-                <tr>
+                <tr onClick="toggleFleet({{ fleet.id }});">
                   {% if fleet.fleet_command %}
-                  <td class="fleet-command"><strong>Fleet ({{ fleet.members.count }}):</strong>{{ fleet.fleet_command.name }} {{ fleet.fleet_command.fleet_boss }}</td>
+                  <td class="fleet-command">
+                    <span class="fleet-glyph-{{ fleet.id }} glyphicon glyphicon-menu-down"></span>
+                    <strong>Fleet ({{ fleet.members.count }}):</strong>
+                    {{ fleet.fleet_command.name }} {{ fleet.fleet_command.fleet_boss }}
+                  </td>
                   <td class="ship"><span class="{{ fleet.fleet_command.ship.group_class }}">{{ fleet.fleet_command.ship.name }}</span></td>
                   {% else %}
-                  <td class="fleet-command"><Strong>Fleet ({{ fleet.members.count }}):</strong> <i>None</i></td>
+                  <td class="fleet-command">
+                    <span class="fleet-glyph-{{ fleet.id }} glyphicon glyphicon-menu-down"></span>
+                    <Strong>Fleet ({{ fleet.members.count }}):</strong>
+                    <i>None</i>
+                  </td>
                   <td class="ship"></td>
                   {% endif %}
                 </tr>
 
                 {% for wing in fleet.wings.all %}
-                <tr>
+                <tr class="fleet-{{ fleet.id }}" onClick="toggleWing({{ wing.id }});">
                   {% if wing.wing_command %}
-                  <td class="wing-command"><strong>{{ wing.name }}:</strong> {{ wing.wing_command.name }} {{ wing.wing_command.fleet_boss }}</td>
+                  <td class="wing-command">
+                    <span class="wing-glyph-{{ wing.id }} glyphicon glyphicon-menu-down"></span>
+                    <strong>{{ wing.name }}:</strong>
+                    {{ wing.wing_command.name }} {{ wing.wing_command.fleet_boss }}
+                  </td>
                   <td class="ship"><span class="{{ wing.wing_command.ship.group_class }}">{{ wing.wing_command.ship.name }}</span></td>
                   {% else %}
-                  <td class="wing-command"><strong>{{ wing.name }} ({{ wing.members.count }}):</strong> <i>None</i></td>
+                  <td class="wing-command">
+                    <span class="wing-glyph-{{ wing.id }} glyphicon glyphicon-menu-down"></span>
+                    <strong>{{ wing.name }} ({{ wing.members.count }}):</strong>
+                    <i>None</i></td>
                   <td class="ship"></td>
                   {% endif %}
                 </tr>
                   {% for squad in wing.squads.all %}
-                  <tr>
+                  <tr class="fleet-{{ fleet.id }} wing-{{ wing.id }}" onClick="toggleSquad({{ squad.id }});">
                     {% if squad.squad_command %}
-                    <td class="squad-command"><strong>{{ squad.name }} ({{ squad.members.count }}):</strong> {{ squad.squad_command.name }} {{ squad.squad_command.fleet_boss }}</td>
+                    <td class="squad-command">
+                      <span class="squad-glyph-{{ squad.id }} glyphicon glyphicon-menu-down"></span>
+                      <strong>{{ squad.name }} ({{ squad.members.count }}):</strong>
+                      {{ squad.squad_command.name }} {{ squad.squad_command.fleet_boss }}
+                    </td>
                     <td class="ship"><span class="{{ squad.squad_command.ship.group_class }}">{{ squad.squad_command.ship.name }}</span></td>
                     {% else %}
-                    <td class="squad-command"><strong>{{ squad.name }} ({{ squad.members.count }}):</strong> <i>None</i></td>
+                    <td class="squad-command">
+                      <span class="squad-glyph-{{ squad.id }} glyphicon glyphicon-menu-down"></span>
+                      <strong>{{ squad.name }} ({{ squad.members.count }}):</strong>
+                      <i>None</i>
+                    </td>
                     <td class="ship"></td>
                     {% endif %}
                   </tr>
 
                     {% for member in squad.squadies %}
-                    <tr>
+                    <tr class="fleet-{{ fleet.id }} wing-{{ wing.id }} squad-{{ squad.id }}">
                       <td class="squad-member">{{ member.name }}</td>
                       <td class="ship"><span class="{{ member.ship.group_class }}">{{ member.ship.name }}</span></td>
                     </tr>
@@ -82,7 +158,7 @@
                 <div class="row">
                   <table class="table table-striped table-hover">
                     {% for ship in ships %}
-                    <tr id="type-{{ ship.id }}" id="group-{{ group.id }}" onmouseover="highlightGroupOn([{{ ship.group_id }}]);" onmouseout="highlightGroupOff([{{ ship.group_id }}]);">
+                    <tr id="type-{{ ship.id }}" id="group-{{ group.id }}">
                       <td class="{{ ship.group_id|highlight }} col-lg-2 col-sm-2">
                         <div align="center">
                           <strong>{{ ship.ships }}</strong>
@@ -113,7 +189,7 @@
                 <div class="row">
                   <table class="table table-striped table-hover">
                     {% for group in caps %}
-                    <tr id="group-{{ group.id }}" onmouseover="highlightTypeOn({{ group.item_ids }});" onmouseout="highlightTypeOff({{ group.item_ids }});">
+                    <tr id="group-{{ group.id }}">
                       <td class="{{ group.id|highlight }} col-lg-2 col-sm-2">
                         <div align="center">
                           <strong>{{ group.ships }}</strong>
@@ -140,7 +216,7 @@
                 <div class="row">
                   <table class="table table-striped table-hover">
                     {% for group in subs %}
-                    <tr id="group-{{ group.id }}" onmouseover="highlightTypeOn({{ group.item_ids }});" onmouseout="highlightTypeOff({{ group.item_ids }});">
+                    <tr id="group-{{ group.id }}">
                       <td class="{{ group.id|highlight }} col-lg-2 col-sm-2">
                         <div align="center">
                           <strong>{{ group.ships }}</strong>
@@ -201,7 +277,7 @@
                 <div class="row">
                   <table class="table table-striped table-hover">
                     {% for alliance in alliances %}
-                    <tr onmouseover="highlightOn({{ alliance.affiliations }});" onmouseout="highlightOff({{ alliance.affiliations }});">
+                    <tr>
                       <td class="icon col-lg-1">
                         <a href="{{ alliance.dotlan_link }}">
                           <img class="logo" src="https://image.eveonline.com/Alliance/{{ alliance.id }}_64.png">
@@ -233,7 +309,7 @@
                 <div class="row">
                   <table class="table table-striped table-hover">
                     {% for corp in corps %}
-                    <tr onmouseover="highlightOn({{ corp.affiliations }});" onmouseout="highlightOff({{ corp.affiliations }});">
+                    <tr>
                       <td class="icon col-lg-1">
                         <a href="{{ corp.dotlan_link }}">
                           <img class="logo" src="https://image.eveonline.com/Corporation/{{ corp.id }}_64.png">
