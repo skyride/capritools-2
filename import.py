@@ -45,7 +45,7 @@ class Importer:
             """
             SELECT
                 solarSystemID, constellationID, regionID, solarSystemName,
-                x, y, z, factionID, radius
+                x, y, z, factionID, radius, sunTypeID
             FROM mapSolarSystems
             """
         )
@@ -68,6 +68,7 @@ class Importer:
             db_system.z = row[6]
             db_system.factionID = row[7]
             db_system.radius = row[8]
+            db_system.sun_id = row[9]
             db_system.save()
 
         return added

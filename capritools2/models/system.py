@@ -1,5 +1,6 @@
 from django.db import models
 
+from item import Item
 from region import Region
 from constellation import Constellation
 
@@ -14,6 +15,7 @@ class System(models.Model):
     z = models.FloatField()
     factionID = models.IntegerField(null=True)
     radius = models.FloatField(null=True)
+    sun = models.ForeignKey(Item)
 
 
     def dotlan_system(self):
