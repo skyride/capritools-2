@@ -16,6 +16,12 @@ from fleetwing import *
 from fleetsquad import *
 from fleetmember import *
 
+# Fleet Tracking
+from fleet import *
+from fleet_wing import *
+from fleet_squad import *
+from fleet_member import *
+
 # Dynamic Data
 from character import *
 from corporation import *

@@ -26,7 +26,13 @@ class ESI():
 
     # Wrapper for POST
     def post(self, url, data=None, get_vars={}, cache_time=30, debug=settings.DEBUG):
-        return self.request(url, data=data, method=requests.post, get_vars=get_vars, cache_time=30, debug=debug)
+        return self.request(url, data=data, method=requests.post, get_vars=get_vars, cache_time=cache_time, debug=debug)
+
+    def put(self, url, data=None, get_vars={}, cache_time=30, debug=settings.DEBUG):
+        return self.request(url, data=data, method=requests.put, get_vars=get_vars, cache_time=cache_time, debug=debug)
+
+    def delete(self, url, data=None, get_vars={}, cache_time=30, debug=settings.DEBUG):
+        return self.request(url, data=data, method=requests.delete, get_vars=get_vars, cache_time=cache_time, debug=debug)
 
 
     def request(self, url, data=None, method=requests.get, retries=0, get_vars={}, cache_time=30, debug=settings.DEBUG):
@@ -43,13 +49,15 @@ class ESI():
             cache_key = sha256("%s:%s:%s" % (str(method), full_url, json.dumps(data))).hexdigest()
         else:
             cache_key = sha256("%s:%s:%s:%s" % (str(method), self.token.extra_data['access_token'], full_url, json.dumps(data))).hexdigest()
-        r = cache.get(cache_key)
-        if r != None:
-            r = json.loads(r)
-            if r == None:
-                return None
-            else:
-                return r
+
+        if cache_time > 0:
+            r = cache.get(cache_key)
+            if r != None:
+                r = json.loads(r)
+                if r == None:
+                    return None
+                else:
+                    return r
 
         # Nope, no cache, hit the API
         r = method(full_url, data=data, headers=self._bearer_header())
