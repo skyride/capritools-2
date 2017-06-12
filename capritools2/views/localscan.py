@@ -77,7 +77,7 @@ def localscan_view(request, key):
     }
 
     # Cache the object
-    cache.set("localscan_%s" % key, data, 3600 * 12)
+    cache.set("localscan_%s" % key, data, 60)
 
     return render_page(
         "capritools2/localscan_view.html",

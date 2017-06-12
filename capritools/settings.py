@@ -191,11 +191,13 @@ THEMES = [
 # Celery
 CELERY_APP_NAME = "capritools2"
 BROKER_URL = "redis://127.0.0.1:6379/"
+CELERY_RESULT_BACKEND = "redis://127.0.0.1:6379/"
+CELERY_IGNORE_RESULT = False
+CELERY_TASK_RESULT_EXPIRES = 1200
 
 CELERY_DISABLE_RATE_LIMITS = True
 CELERYD_TASK_SOFT_TIME_LIMIT = 300
 CELERYD_PREFETCH_MULTIPLIER = 1
-CELERY_IGNORE_RESULT = True
 CELERY_STORE_ERRORS_EVEN_IF_IGNORED = True
 
 # Periodic tasks
@@ -206,5 +208,9 @@ CELERYBEAT_SCHEDULE = {
     'price_update_spawner': {
         'task': 'price_update_spawner',
         'schedule': timedelta(minutes=2)
+    },
+    'fetch_spawner': {
+        'task': 'fetch_spawner',
+        'schedule': timedelta(minutes=1)
     }
 }

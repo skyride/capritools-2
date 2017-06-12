@@ -9,8 +9,52 @@ from django.db.models import Q
 from django.core.paginator import Paginator
 
 from capritools import settings
-from capritools2.models import Item
+from capritools2.models import *
+from capritools2.esi import ESI
 from capritools.celery import app
+
+
+# The ESI API only provides IDs, use this to fix missing info we don't call for async
+@app.task(name="fetch_spawner")
+def fetch_spawner():
+    for char in Character.objects.filter(name=None).all():
+        fetch_character_info(char.id)
+    for corp in Corporation.objects.filter(Q(ticker=None) | Q(name=None)).all():
+        fetch_corp_info.delay(corp.id)
+    for alliance in Alliance.objects.filter(Q(ticker=None) | Q(name=None)).all():
+        fetch_alliance_info.delay(alliance.id)
+
+
+@app.task(name="fetch_character_info")
+def fetch_character_info(id):
+    api = ESI()
+    char = api.get("/characters/%s/" % id)
+    db_char = Character.objects.get(id=id)
+    db_char.name = char['name']
+    db_char.save()
+    print "Fetched info for %s:%s" % (db_char.id, db_char.name)
+
+
+@app.task(name="fetch_corp_info")
+def fetch_corp_info(id):
+    api = ESI()
+    corp = api.get("/corporations/%s/" % id)
+    db_corp = Corporation.objects.get(id=id)
+    db_corp.name = corp['corporation_name']
+    db_corp.ticker = corp['ticker']
+    db_corp.save()
+    print "Fetched info for %s:%s" % (db_corp.id, db_corp.name)
+
+
+@app.task(name="fetch_alliance_info")
+def fetch_alliance_info(id):
+    api = ESI()
+    alliance = api.get("/alliances/%s/" % id)
+    db_alliance = Alliance.objects.get(id=id)
+    db_alliance.name = alliance['alliance_name']
+    db_alliance.ticker = alliance['ticker']
+    db_alliance.save()
+    print "Fetched info for %s:%s" % (db_alliance.id, db_alliance.name)
 
 
 @app.task(name="price_update_spawner")
@@ -30,8 +74,6 @@ def price_update_spawner():
             fetch_prices.delay(type_ids)
 
         print "Market Update Spawner called for the update of %s items" % (items.count())
-    else:
-        print "No market prices to be updated"
 
 
 @app.task(name="fetch_prices")
