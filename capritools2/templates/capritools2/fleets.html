@@ -10,7 +10,7 @@
 <p class="lead">
 </p>
 
-<form action="{% url 'fleet_submit' %}" method="post">
+<form action="{% url 'fleet_scan_submit' %}" method="post">
   <fieldset>
     {% csrf_token %}
     <i><legend>Paste your fleet scan into the box below</legend></i>
@@ -23,4 +23,31 @@
     </div>
   </fieldset>
 </form>
+<hr />
+
+<h1>Fleet Tracking Tool</h1>
+
+<p class="lead">
+</p>
+
+{% if user.is_authenticated %}
+<form action="{% url 'fleet_live_submit' %}" method="post">
+  <fieldset>
+    {% csrf_token %}
+    <i><legend>Paste the URL from "Copy External Fleet Link"</legend></i>
+    <div class="form-group">
+      <input type="name" name="url" class="form-control" placeholder="https://crest-tq.eveonline.com/fleets/{fleet_id}/" />
+    </div>
+
+    <div class="form-group">
+      <button type="submit" class="btn btn-lg btn-primary">Submit</button>
+    </div>
+  </fieldset>
+</form>
+{% else %}
+<p class="lead">
+  The live fleet tracking tool uses the ESI API and requires you to log in to gain access.
+</p>
+{% endif %}
+
 {% endblock %}

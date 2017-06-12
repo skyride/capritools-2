@@ -29,8 +29,9 @@ urlpatterns = [
     url(r'^paste/(?P<key>[a-zA-Z0-9]+)/$', views.paste_view, name="paste_view"),
 
     url(r'^fleets/$', views.fleet_home, name="fleet"),
-    url(r'^fleets/submit/$', views.fleet_submit, name="fleet_submit"),
+    url(r'^fleets/scan/submit/$', views.fleet_scan_submit, name="fleet_scan_submit"),
     url(r'^fleets/scan/(?P<key>[a-zA-Z0-9]+)/$', views.fleet_scan_view, name="fleet_scan_view"),
+    url(r'^fleets/live/submit/$', views.fleet_live_submit, name="fleet_live_submit"),
 
     url(r'^quickmath/$', views.quickmath_home, name="quickmath"),
     url(r'^quickmath/moongoo/$', views.quickmath_moongoo, name="moongoo"),

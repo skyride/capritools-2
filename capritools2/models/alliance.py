@@ -5,8 +5,12 @@ from django.db import models
 
 class Alliance(models.Model):
     id = models.IntegerField(primary_key=True)
-    name = models.CharField(max_length=64)
+    name = models.CharField(max_length=64, null=True)
     ticker = models.CharField(max_length=5, null=True, default=None, db_index=True)
+
+
+    def __unicode__(self):
+        return "id=%s name=%s" % (self.id, self.name)
 
 
     def dotlan_link(self):
@@ -47,3 +51,17 @@ class Alliance(models.Model):
             return alliance
         else:
             return alliance[0]
+
+
+    @staticmethod
+    def get_or_create_async(id):
+        from capritools2.tasks import fetch_alliance_info
+
+        alliance = Alliance.objects.filter(id=id)
+        if alliance.count() == 1:
+            return alliance[0]
+
+        alliance = Alliance(id=id)
+        alliance.save()
+        fetch_alliance_info.delay(id)
+        return alliance

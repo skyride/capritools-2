@@ -212,5 +212,9 @@ CELERYBEAT_SCHEDULE = {
     'fetch_spawner': {
         'task': 'fetch_spawner',
         'schedule': timedelta(minutes=1)
+    },
+    'fleet_live_update_spawner': {
+        'task': 'fleet_live_update_spawner',
+        'schedule': timedelta(seconds=10)
     }
 }

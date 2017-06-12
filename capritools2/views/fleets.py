@@ -1,5 +1,8 @@
+import re
+
 from django.shortcuts import redirect
 from django.db.models import Count, Sum, Q
+from django.http import HttpResponse
 
 from capritools2.models import *
 from capritools2.stuff import render_page
@@ -14,7 +17,7 @@ def fleet_home(request):
     )
 
 
-def fleet_submit(request):
+def fleet_scan_submit(request):
     parser = FleetScanParser()
     if parser.parse(request.POST.get("fleetscan"), request.user):
         return redirect("fleet_scan_view", key=parser.scan.key)
@@ -22,6 +25,20 @@ def fleet_submit(request):
         request.session['alert_type'] = "danger"
         request.session['alert_message'] = "Failed to parse fleet scan."
         return redirect("fleet")
+
+
+def fleet_live_submit(request):
+    pattern = re.compile("https://crest-tq.eveonline.com/fleets/([0-9]+)/")
+    m = pattern.search(request.POST.get("url"))
+    fleet_id = m.group(1)
+
+    # Create fleet object
+    fleet = Fleet(
+        id=fleet_id,
+        token = request.user.social_auth.get(provider="eveonline")
+    )
+    fleet.save()
+    return HttpResponse(fleet_id)
 
 
 def fleet_scan_view(request, key):

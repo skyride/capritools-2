@@ -16,26 +16,38 @@ class ESI():
     client_id = settings.SOCIAL_AUTH_EVEONLINE_KEY
     secret_key = settings.SOCIAL_AUTH_EVEONLINE_SECRET
 
+    cache_time = 30
     token = None
     fleet_id = None
 
 
     # Wrapper for GET
-    def get(self, url, data=None, get_vars={}, cache_time=30, debug=settings.DEBUG):
+    def get(self, url, data=None, get_vars={}, cache_time=None, debug=settings.DEBUG):
+        if cache_time == None:
+            cache_time = self.cache_time
         return self.request(url, data=data, method=requests.get, get_vars=get_vars, cache_time=cache_time, debug=debug)
 
     # Wrapper for POST
-    def post(self, url, data=None, get_vars={}, cache_time=30, debug=settings.DEBUG):
+    def post(self, url, data=None, get_vars={}, cache_time=None, debug=settings.DEBUG):
+        if cache_time == None:
+            cache_time = self.cache_time
         return self.request(url, data=data, method=requests.post, get_vars=get_vars, cache_time=cache_time, debug=debug)
 
-    def put(self, url, data=None, get_vars={}, cache_time=30, debug=settings.DEBUG):
+    def put(self, url, data=None, get_vars={}, cache_time=None, debug=settings.DEBUG):
+        if cache_time == None:
+            cache_time = self.cache_time
         return self.request(url, data=data, method=requests.put, get_vars=get_vars, cache_time=cache_time, debug=debug)
 
-    def delete(self, url, data=None, get_vars={}, cache_time=30, debug=settings.DEBUG):
+    def delete(self, url, data=None, get_vars={}, cache_time=None, debug=settings.DEBUG):
+        if cache_time == None:
+            cache_time = self.cache_time
         return self.request(url, data=data, method=requests.delete, get_vars=get_vars, cache_time=cache_time, debug=debug)
 
 
-    def request(self, url, data=None, method=requests.get, retries=0, get_vars={}, cache_time=30, debug=settings.DEBUG):
+    def request(self, url, data=None, method=requests.get, retries=0, get_vars={}, cache_time=None, debug=settings.DEBUG):
+        if cache_time == None:
+            cache_time = self.cache_time
+
         # Do replacements
         full_url = self._replacements(url)
 
