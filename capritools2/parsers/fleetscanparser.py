@@ -79,7 +79,7 @@ class FleetScanParser:
                         wing_command=skills['wing'],
                         fleet_command=skills['fleet'],
 
-                        system=System.objects.get(name=line[1]),
+                        system=System.objects.get(name=line[1].replace(" (Docked)", "")),
                         ship=Item.objects.get(name=line[2]),
 
                         command=command,
