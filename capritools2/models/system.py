@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.cache import cache
 
 from item import Item
 from region import Region
@@ -36,3 +37,26 @@ class System(models.Model):
         return "https://evemaps.dotlan.net/map/%s" % (
             self.region.name.replace(" ", "_")
         )
+
+    def export(self):
+        key = "system_%s" % self.id
+        out = cache.get(key)
+        if out != None:
+            return out
+
+        out = {
+            "system": {
+                "id": self.id,
+                "name": self.name
+            },
+            "constellation": {
+                "id": self.constellation_id,
+                "name": self.constellation.name
+            },
+            "region": {
+                "id": self.region_id,
+                "name": self.region.name
+            }
+        }
+        cache.set(key, out, 3600)
+        return out

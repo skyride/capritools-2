@@ -1,5 +1,6 @@
 from django.db import models
 from django.conf import settings
+from django.core.cache import cache
 
 from group import Group
 from marketgroup import MarketGroup
@@ -33,3 +34,25 @@ class Item(models.Model):
 
     def __unicode__(self):
         return "id=%s name='%s'" % (self.id, self.name)
+
+
+    def export(self):
+        key = "item_%s" % self.id
+        out = cache.get(key)
+        if out != None:
+            return out
+        out = {
+            "id": self.id,
+            "name": self.name,
+            "group": {
+                "id": self.group_id,
+                "name": self.group.name,
+                "category": {
+                    "id": self.group.category_id,
+                    "name": self.group.category.name
+                }
+            }
+        }
+
+        cache.set(key, out, 3600)
+        return out

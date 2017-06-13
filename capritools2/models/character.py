@@ -9,6 +9,13 @@ class Character(models.Model):
         return "id=%s, name=%s" % (self.id, self.name)
 
 
+    def export(self):
+        return {
+            "id": self.id,
+            "name": self.name
+        }
+
+
     @staticmethod
     def get_or_create(id, name):
         character = Character.objects.filter(id=id)

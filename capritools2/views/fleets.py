@@ -1,11 +1,13 @@
 import re
+import json
 
 from django.shortcuts import redirect
 from django.db.models import Count, Sum, Q
 from django.http import HttpResponse
+from django.contrib.auth.decorators import login_required
 
 from capritools2.models import *
-from capritools2.stuff import render_page
+from capritools2.stuff import render_page, random_key
 from capritools2.parsers.fleetscanparser import FleetScanParser
 
 
@@ -35,10 +37,34 @@ def fleet_live_submit(request):
     # Create fleet object
     fleet = Fleet(
         id=fleet_id,
+        key=random_key(7),
         token = request.user.social_auth.get(provider="eveonline")
     )
     fleet.save()
     return HttpResponse(fleet_id)
+
+
+@login_required
+def fleet_live_json(request, key):
+    fleet = Fleet.objects.get(key=key)
+
+    # Build JSON object
+    out = {
+        "id": fleet.id,
+        "active": fleet.active,
+        "motd": fleet.motd,
+        "voice_enabled": fleet.voice_enabled,
+        "registered": fleet.registered,
+        "free_move": fleet.free_move,
+        "members": map(lambda x: x.export(), fleet.members.all()),
+        "member_count": fleet.members.count(),
+        "commander": fleet.commander(),
+        "wings": map(lambda x: x.export(), fleet.wings.all()),
+        "member_events": map(lambda x: x.export(), fleet.events.all()),
+        "jumps": map(lambda x: x.export(), fleet.jumps.all())
+    }
+
+    return HttpResponse(json.dumps(out), content_type="application/json")
 
 
 def fleet_scan_view(request, key):

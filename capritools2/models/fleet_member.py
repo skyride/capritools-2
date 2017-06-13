@@ -22,3 +22,44 @@ class Fleet_Member(models.Model):
     role = models.CharField(max_length=16)
     role_name = models.TextField()
     join_time = models.DateTimeField(auto_now_add=True)
+
+
+    class Meta:
+        ordering = ['character__name']
+
+
+    def export(self):
+        from capritools2.models import *
+        t = {
+            "id": self.id,
+            "takes_fleet_warp": self.takes_fleet_warp,
+            "boss": self.boss,
+            "role": self.role,
+            "role_name": self.role_name,
+            "fleet": {},
+            "character": self.character.export(),
+            "ship": self.ship.export(),
+            "location": self.system.export(),
+        }
+
+        if self.corporation != None:
+            t['corporation'] = {
+                "id": self.corporation_id,
+                "name": self.corporation.name
+            }
+        if self.alliance != None:
+            t['alliance'] = {
+                "id": self.alliance_id,
+                "name": self.alliance.name
+            }
+        if self.wing != None:
+            t['fleet']['wing'] = {
+                "id": self.wing_id,
+                "name": self.wing.name
+            }
+        if self.squad != None:
+            t['fleet']['squad'] = {
+                "id": self.squad_id,
+                "name": self.squad.name
+            }
+        return t

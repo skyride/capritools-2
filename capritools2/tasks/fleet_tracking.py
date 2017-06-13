@@ -24,6 +24,7 @@ def fleet_live_update(fleet_id):
     fleet = api.get("/fleets/$fleet/")
     if fleet == None:
         db_fleet.active = False
+        db_fleet.save()
         return
 
     db_fleet.motd = fleet['motd']
