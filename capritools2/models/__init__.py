@@ -21,6 +21,9 @@ from fleet import *
 from fleet_wing import *
 from fleet_squad import *
 from fleet_member import *
+from fleet_memberevent import *
+from fleet_shipchange import *
+from fleet_jump import *
 
 # Dynamic Data
 from character import *
