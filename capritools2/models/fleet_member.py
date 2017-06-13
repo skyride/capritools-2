@@ -17,7 +17,7 @@ class Fleet_Member(models.Model):
     # Meta
     system = models.ForeignKey(System, related_name="fleet_members", null=True)
     ship = models.ForeignKey(Item, related_name="fleet_members", null=True)
-    takes_fleet_warp = models.BooleanField()
+    takes_fleet_warp = models.NullBooleanField(default=True)
     boss = models.BooleanField(default=False)
     role = models.CharField(max_length=16)
     role_name = models.TextField()
@@ -39,7 +39,7 @@ class Fleet_Member(models.Model):
             "fleet": {},
             "character": self.character.export(),
             "ship": self.ship.export(),
-            "location": self.system.export(),
+            "location": self.system.export()
         }
 
         if self.corporation != None:

@@ -98,20 +98,21 @@ def fleet_live_update(fleet_id):
                 ).save()
         db_member.ship_id = member['ship_type_id']
 
-        if db_member.takes_fleet_warp != member['takes_fleet_warp']:
-            if member['takes_fleet_warp']:
-                Fleet_MemberEvent(
-                    fleet=db_fleet,
-                    character=db_member.character,
-                    event="accept_fleetwarp"
-                ).save()
-            else:
-                Fleet_MemberEvent(
-                    fleet=db_fleet,
-                    character=db_member.character,
-                    event="exempt_fleetwarp"
-                ).save()
-        db_member.takes_fleet_warp = member['takes_fleet_warp']
+        if db_member.takes_fleet_warp != None:
+            if db_member.takes_fleet_warp != member['takes_fleet_warp']:
+                if member['takes_fleet_warp']:
+                    Fleet_MemberEvent(
+                        fleet=db_fleet,
+                        character=db_member.character,
+                        event="accept_fleetwarp"
+                    ).save()
+                else:
+                    Fleet_MemberEvent(
+                        fleet=db_fleet,
+                        character=db_member.character,
+                        event="exempt_fleetwarp"
+                    ).save()
+            db_member.takes_fleet_warp = member['takes_fleet_warp']
 
         db_member.save()
 

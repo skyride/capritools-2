@@ -16,18 +16,21 @@ class Fleet_Jump(models.Model):
         ordering = ['-timestamp']
 
 
-    def export(self):
-        key = "fleet_jump_%s" % self.id
+    def export(self, character=False):
+        key = "fleet_jump_%s_%s" % (self.id, character)
         out = cache.get(key)
         if out != None:
             return out
 
         out = {
-            "character": self.character.export(),
             "from_system": self.from_system.export(),
             "to_system": self.to_system.export(),
             "timestamp": str(self.timestamp)
         }
-        if out['character']['name'] != None:
+        if character:
+            out['character'] = self.character.export()
+            if out['character']['name'] != None:
+                cache.set(key, out, 3600)
+        else:
             cache.set(key, out, 3600)
         return out

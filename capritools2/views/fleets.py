@@ -29,6 +29,7 @@ def fleet_scan_submit(request):
         return redirect("fleet")
 
 
+@login_required
 def fleet_live_submit(request):
     pattern = re.compile("https://crest-tq.eveonline.com/fleets/([0-9]+)/")
     m = pattern.search(request.POST.get("url"))
@@ -38,6 +39,7 @@ def fleet_live_submit(request):
     fleet = Fleet(
         id=fleet_id,
         key=random_key(7),
+        user=request.user,
         token = request.user.social_auth.get(provider="eveonline")
     )
     fleet.save()
@@ -45,7 +47,7 @@ def fleet_live_submit(request):
 
 
 @login_required
-def fleet_live_json(request, key):
+def fleet_live_monolith(request, key):
     fleet = Fleet.objects.get(key=key)
 
     # Build JSON object
@@ -60,8 +62,9 @@ def fleet_live_json(request, key):
         "member_count": fleet.members.count(),
         "commander": fleet.commander(),
         "wings": map(lambda x: x.export(), fleet.wings.all()),
-        "member_events": map(lambda x: x.export(), fleet.events.all()),
-        "jumps": map(lambda x: x.export(), fleet.jumps.all())
+        "member_events": map(lambda x: x.export(character=True), fleet.events.all()),
+        "ship_changes": map(lambda x: x.export(character=True), fleet.ship_changes.all()),
+        "jumps": map(lambda x: x.export(character=True), fleet.jumps.all())
     }
 
     return HttpResponse(json.dumps(out), content_type="application/json")
