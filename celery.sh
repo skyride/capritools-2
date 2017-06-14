@@ -1,2 +1,2 @@
 #!/bin/bash
-celery worker -A capritools -B -c 8
+celery worker -A capritools -B -c 32
