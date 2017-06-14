@@ -15,6 +15,7 @@ urlpatterns = [
     url(r'^account/delete/local/(?P<key>[a-zA-Z0-9]+)/$', views.account_delete_localscan, name="account_delete_localscan"),
     url(r'^account/delete/paste/(?P<key>[a-zA-Z0-9]+)/$', views.account_delete_paste, name="account_delete_paste"),
     url(r'^account/delete/fleetscan/(?P<key>[a-zA-Z0-9]+)/$', views.account_delete_fleetscan, name="account_delete_fleetscan"),
+    url(r'^account/delete/livefleet/(?P<key>[a-zA-Z0-9]+)/$', views.account_delete_livefleet, name="account_delete_livefleet"),
 
     url(r'^dscan/$', views.dscan_home, name="dscan"),
     url(r'^dscan/submit/$', views.dscan_submit, name="dscan_submit"),

@@ -11,6 +11,7 @@
   <li role="presentation"><a href="#tab_localscans" data-toggle="tab">Local Scans</a></li>
   <li role="presentation"><a href="#tab_pastes" data-toggle="tab">Pastes</a></li>
   <li role="presentation"><a href="#tab_fleetscans" data-toggle="tab">Fleet Scans</a></li>
+  <li role="presentation"><a href="#tab_livefleets" data-toggle="tab">Live Fleets</a></li>
 </ul>
 
 <div class="tab-content">
@@ -165,6 +166,52 @@
         </tr>
         {% endfor %}
       </thead>
+    </table>
+  </div>
+
+  <div class="tab-pane" id="tab_livefleets">
+    <table class="table table-striped table-hover">
+      <thead>
+        <tr>
+          <th>Key</th>
+          <th>Fleet ID</th>
+          <th>Main System</th>
+          <th>Members</th>
+          <th>Active</th>
+          <th>Added</th>
+          <th></th>
+        </tr>
+      </thead>
+
+      <tbody>
+        {% for fleet in livefleets %}
+        <tr>
+          <td><a href="{% url 'fleet_live_view' fleet.key %}">{{ fleet.key }}</a></td>
+          <td>{{ fleet.id }}</td>
+          <td>
+            {% if fleet.main_system %}
+            <a href="{{ fleet.main_system.dotlan_system }}">{{ fleet.main_system.name }}</a>
+            &lt;
+            <a href="{{ fleet.main_system.dotlan_constellation }}">{{ fleet.main_system.constellation.name }}</a>
+            &lt;
+            <a href="{{ fleet.main_system.dotlan_region }}">{{ fleet.main_system.region.name }}</a>
+            {% else %}
+            Unknown
+            {% endif %}
+          </td>
+          <td>{{ fleet.members.count }}</td>
+          <td>
+            {% if fleet.active %}
+            <span class="text-success">Active</span>
+            {% else %}
+            <span class="text-danger">Inactive</span>
+            {% endif %}
+          </td>
+          <td>{{ fleet.added|date:"d/m/y H:i" }}</td>
+          <td><a href="{% url 'account_delete_livefleet' fleet.key %}" class="btn btn-xs btn-danger">Delete</a></td>
+        </tr>
+        {% endfor %}
+      </tbody>
     </table>
   </div>
 </div>

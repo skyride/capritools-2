@@ -17,7 +17,9 @@ def account_scans(request):
 
             'pastes': Paste.objects.filter(user=request.user).order_by('-added'),
 
-            'fleetscans': FleetScan.objects.filter(user=request.user).order_by('-added')
+            'fleetscans': FleetScan.objects.filter(user=request.user).order_by('-added'),
+
+            'livefleets': Fleet.objects.filter(user=request.user).order_by('-added'),
         },
         request
     )
@@ -25,7 +27,7 @@ def account_scans(request):
 
 def account_delete_dscan(request, key):
     try:
-        Dscan.objects.get(key=key).delete()
+        Dscan.objects.get(key=key, user=request.user).delete()
 
         request.session['alert_type'] = "success"
         request.session['alert_message'] = "Successfully deleted Dscan %s" % key
@@ -38,7 +40,7 @@ def account_delete_dscan(request, key):
 
 def account_delete_localscan(request, key):
     try:
-        LocalScan.objects.get(key=key).delete()
+        LocalScan.objects.get(key=key, user=request.user).delete()
 
         request.session['alert_type'] = "success"
         request.session['alert_message'] = "Successfully deleted Local Scan %s" % key
@@ -51,7 +53,7 @@ def account_delete_localscan(request, key):
 
 def account_delete_paste(request, key):
     try:
-        Paste.objects.get(key=key).delete()
+        Paste.objects.get(key=key, user=request.user).delete()
 
         request.session['alert_type'] = "success"
         request.session['alert_message'] = "Successfully deleted Paste %s" % key
@@ -64,7 +66,7 @@ def account_delete_paste(request, key):
 
 def account_delete_fleetscan(request, key):
     try:
-        FleetScan.objects.get(key=key).delete()
+        FleetScan.objects.get(key=key, user=request.user).delete()
 
         request.session['alert_type'] = "success"
         request.session['alert_message'] = "Successfully deleted Fleet Scan %s" % key
@@ -72,4 +74,17 @@ def account_delete_fleetscan(request, key):
     except Exception:
         request.session['alert_type'] = "danger"
         request.session['alert_message'] = "Couldn't delete Local Fleet Scan %s" % key
+        return redirect("%s#tab_pastes" % reverse('account_scans'))
+
+
+def account_delete_livefleet(request, key):
+    try:
+        Fleet.objects.get(key=key, user=request.user).delete()
+
+        request.session['alert_type'] = "success"
+        request.session['alert_message'] = "Successfully deleted Live Fleet %s" % key
+        return redirect("%s#tab_pastes" % reverse('account_scans'))
+    except Exception:
+        request.session['alert_type'] = "danger"
+        request.session['alert_message'] = "Couldn't delete Local Live Fleet %s" % key
         return redirect("%s#tab_pastes" % reverse('account_scans'))
