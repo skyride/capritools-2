@@ -50,12 +50,11 @@ var key = "{{ fleet.key }}";
                       </td>
                       <td class="ship">
                         <span class="text-{{ fleetLive.fleet.commander.ship.style }}" ng-if="fleetLive.fleet.commander">{{ fleetLive.fleet.commander.ship.name }}</span>
-                        <span ng-if="!fleetLive.fleet.commander"><i>None</i></span>
                       </td>
                     </tr>
 
                     <!-- Wings -->
-                    <tr ng-repeat-start="wing in fleetLive.fleet.wings | orderBy: 'name'" ng-click="hide_wing = !hide_wing" ng-hide="hide_fleet">
+                    <tr ng-repeat-start="wing in fleetLive.fleet.wings | orderBy: 'id'" ng-click="hide_wing = !hide_wing" ng-hide="hide_fleet">
                       <td class="wing-command">
                         <span class="glyphicon glyphicon-menu-down" ng-hide="hide_wing"></span>
                         <span class="glyphicon glyphicon-menu-right" ng-hide="!hide_wing"></span>
@@ -69,7 +68,7 @@ var key = "{{ fleet.key }}";
                     </tr>
 
                       <!-- Squads -->
-                      <tr ng-repeat-start="squad in wing.squads | orderBy: 'name'" ng-click="hide_squad = !hide_squad" ng-hide="hide_fleet || hide_wing">
+                      <tr ng-repeat-start="squad in wing.squads | orderBy: 'id'" ng-click="hide_squad = !hide_squad" ng-hide="hide_fleet || hide_wing">
                         <td class="squad-command">
                           <span class="glyphicon glyphicon-menu-down" ng-hide="hide_squad"></span>
                           <span class="glyphicon glyphicon-menu-right" ng-hide="!hide_squad"></span>
