@@ -2,6 +2,7 @@ import re
 import json
 
 from django.shortcuts import redirect
+from django.db import transaction
 from django.db.models import Count, Sum, Q
 from django.http import HttpResponse
 from django.contrib.auth.decorators import login_required
@@ -9,6 +10,7 @@ from django.contrib.auth.decorators import login_required
 from capritools2.models import *
 from capritools2.stuff import render_page, random_key
 from capritools2.parsers.fleetscanparser import FleetScanParser
+from capritools2.tasks import fleet_live_update
 
 
 def fleet_home(request):
@@ -30,6 +32,7 @@ def fleet_scan_submit(request):
 
 
 @login_required
+@transaction.atomic
 def fleet_live_submit(request):
     pattern = re.compile("https://crest-tq.eveonline.com/fleets/([0-9]+)/")
     m = pattern.search(request.POST.get("url"))
@@ -43,12 +46,15 @@ def fleet_live_submit(request):
         token = request.user.social_auth.get(provider="eveonline")
     )
     fleet.save()
-    return HttpResponse(fleet_id)
+    fleet_live_update(fleet.id)
+    return redirect("fleet_live_view", key=fleet.key)
 
 
-@login_required
 def fleet_live_monolith(request, key):
     fleet = Fleet.objects.get(key=key)
+
+    supers = [659, 30]
+    capitals = [485, 547, 883, 1538] + supers
 
     # Build JSON object
     out = {
@@ -64,10 +70,57 @@ def fleet_live_monolith(request, key):
         "wings": map(lambda x: x.export(), fleet.wings.all()),
         "member_events": map(lambda x: x.export(character=True), fleet.events.all()),
         "ship_changes": map(lambda x: x.export(character=True), fleet.ship_changes.all()),
-        "jumps": map(lambda x: x.export(character=True), fleet.jumps.all())
+        "jumps": map(lambda x: x.export(character=True), fleet.jumps.all()),
+        "subs": map(lambda x: dict(x.export().items() + {"ships": x.ships}.items()), Group.objects.filter(
+            items__fleet_members__fleet=fleet
+        ).exclude(
+            id__in=capitals
+        ).annotate(
+            ships=Count('items')
+        ).all()),
+        "sub_count": fleet.members.exclude(ship__group_id__in=capitals).count(),
+        "caps": map(lambda x: dict(x.export().items() + {"ships": x.ships}.items()), Group.objects.filter(
+            items__fleet_members__fleet=fleet,
+            id__in=capitals
+        ).annotate(
+            ships=Count('items')
+        ).all()),
+        "cap_count": fleet.members.filter(ship__group_id__in=capitals).count(),
+        "ships": map(lambda x: dict(x.export().items() + {"ships": x.ships}.items()), Item.objects.filter(
+            fleet_members__fleet=fleet
+        ).annotate(
+            ships=Count('fleet_members')
+        ).all()),
+        "systems": map(lambda x: dict(x.export().items() + {"members": x.members}.items()), System.objects.filter(
+            fleet_members__fleet=fleet
+        ).annotate(
+            members=Count('fleet_members')
+        ).all()),
+        "alliances": map(lambda x: dict(x.export().items() + {"members": x.members}.items()), Alliance.objects.filter(
+            fleet_members__fleet=fleet
+        ).annotate(
+            members=Count('fleet_members')
+        ).all()),
+        "corps": map(lambda x: dict(x.export().items() + {"members": x.members}.items()), Corporation.objects.filter(
+            fleet_members__fleet=fleet
+        ).annotate(
+            members=Count('fleet_members')
+        ).all())
     }
 
     return HttpResponse(json.dumps(out), content_type="application/json")
+
+
+def fleet_live_view(request, key):
+    fleet = Fleet.objects.get(key=key)
+
+    return render_page(
+        "capritools2/fleet_live_view.html",
+        {
+            "fleet": fleet
+        },
+        request
+    )
 
 
 def fleet_scan_view(request, key):

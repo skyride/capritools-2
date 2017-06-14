@@ -33,6 +33,7 @@ urlpatterns = [
     url(r'^fleets/scan/(?P<key>[a-zA-Z0-9]+)/$', views.fleet_scan_view, name="fleet_scan_view"),
     url(r'^fleets/live/submit/$', views.fleet_live_submit, name="fleet_live_submit"),
     url(r'^fleets/live/monolith/(?P<key>[a-zA-Z0-9]+)/$', views.fleet_live_monolith, name="fleet_live_monolith"),
+    url(r'^fleets/live/(?P<key>[a-zA-Z0-9]+)/$', views.fleet_live_view, name="fleet_live_view"),
 
     url(r'^quickmath/$', views.quickmath_home, name="quickmath"),
     url(r'^quickmath/moongoo/$', views.quickmath_moongoo, name="moongoo"),

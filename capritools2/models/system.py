@@ -39,7 +39,7 @@ class System(models.Model):
         )
 
     def export(self):
-        key = "system_%s" % self.id
+        key = "system__%s" % self.id
         out = cache.get(key)
         if out != None:
             return out
@@ -47,7 +47,8 @@ class System(models.Model):
         out = {
             "system": {
                 "id": self.id,
-                "name": self.name
+                "name": self.name,
+                "sun_type": self.sun_id
             },
             "constellation": {
                 "id": self.constellation_id,

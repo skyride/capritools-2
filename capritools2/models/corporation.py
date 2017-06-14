@@ -25,6 +25,13 @@ class Corporation(models.Model):
         else:
             return "[]"
 
+    def export(self):
+        return {
+            "id": self.id,
+            "name": self.name,
+            "dotlan": self.dotlan_link()
+        }
+
 
     @staticmethod
     def get_or_create(id, name=None):

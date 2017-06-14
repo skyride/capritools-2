@@ -1,0 +1,234 @@
+{% extends 'capritools2/base.html' %}
+{% load static %}
+
+{% block title %}Fleets{% endblock %}
+
+{% block active_fleets %}active{% endblock %}
+
+{% block extra_script %}
+<script src="{% static 'capritools2/js/angular.min.js' %}"></script>
+<script src="{% static 'capritools2/js/fleet_live.js' %}"></script>
+{% endblock %}
+
+{% block content %}
+<script>
+var key = "{{ fleet.key }}";
+</script>
+{% verbatim %}
+<div ng-app="fleetLiveApp" ng-controller="fleetLiveController as fleetLive">
+  <div class="panel panel-default">
+    <div class="panel-heading">
+      <strong>
+        Tracking Status:
+        <span ng-show="fleetLive.fleet.active" class="text-success">Active</span>
+        <span ng-hide="fleetLive.fleet.active" class="text-danger">Inactive</span>
+      </strong>
+
+      <span class="pull-right">
+        <span class="label" ng-class="fleetLive.fleet.registered ? 'label-success' : 'label-danger'">Fleet Advert</span>
+        <span class="label" ng-class="fleetLive.fleet.free_move ? 'label-success' : 'label-danger'">Free-Move</span>
+        <span class="label" ng-class="fleetLive.fleet.voice_enabled ? 'label-success' : 'label-danger'">EVE Voice</span>
+      </span>
+    </div>
+
+    <div class="panel-body">
+      <div class="row">
+        <div class="col-md-5">
+          <div class="panel panel-default">
+            <div class="panel-body scan-list fleet-list">
+              <div class="row">
+                <table class="table table-striped table-hover">
+                  <tbody>
+                    <!-- Fleet Command -->
+                    <tr ng-click="hide_fleet = !hide_fleet">
+                      <td class="fleet-command">
+                        <span class="glyphicon glyphicon-menu-down" ng-hide="hide_fleet"></span>
+                        <span class="glyphicon glyphicon-menu-right" ng-hide="!hide_fleet"></span>
+                        <strong>Fleet ({{ fleetLive.fleet.member_count }}):</strong>
+                        <span ng-if="fleetLive.fleet.commander">{{ fleetLive.fleet.commander.character.name }}</span>
+                        <span ng-if="!fleetLive.fleet.commander"><i>None</i></span>
+                      </td>
+                      <td class="ship">
+                        <span class="text-{{ fleetLive.fleet.commander.ship.style }}" ng-if="fleetLive.fleet.commander">{{ fleetLive.fleet.commander.ship.name }}</span>
+                        <span ng-if="!fleetLive.fleet.commander"><i>None</i></span>
+                      </td>
+                    </tr>
+
+                    <!-- Wings -->
+                    <tr ng-repeat-start="wing in fleetLive.fleet.wings | orderBy: 'name'" ng-click="hide_wing = !hide_wing" ng-hide="hide_fleet">
+                      <td class="wing-command">
+                        <span class="glyphicon glyphicon-menu-down" ng-hide="hide_wing"></span>
+                        <span class="glyphicon glyphicon-menu-right" ng-hide="!hide_wing"></span>
+                        <strong>{{ wing.name }} ({{ wing.member_count }}):</strong>
+                        <span ng-if="wing.commander">{{ wing.commander.character.name }}</span>
+                        <span ng-if="!wing.commander"><i>None</i></span>
+                      </td>
+                      <td class="ship">
+                        <span class="text-{{ wing.commander.ship.style }}" ng-if="wing.commander">{{ wing.commander.ship.name }}</span>
+                      </td>
+                    </tr>
+
+                      <!-- Squads -->
+                      <tr ng-repeat-start="squad in wing.squads | orderBy: 'name'" ng-click="hide_squad = !hide_squad" ng-hide="hide_fleet || hide_wing">
+                        <td class="squad-command">
+                          <span class="glyphicon glyphicon-menu-down" ng-hide="hide_squad"></span>
+                          <span class="glyphicon glyphicon-menu-right" ng-hide="!hide_squad"></span>
+                          <strong>{{ squad.name }} ({{ squad.member_count }}):</strong>
+                          <span ng-if="squad.commander">{{ squad.commander.character.name }}</span>
+                          <span ng-if="!squad.commander"><i>None</i></span>
+                        </td>
+                        <td class="ship">
+                          <span class="text-{{ squad.commander.ship.style }}" ng-if="squad.commander">{{ squad.commander.ship.name }}</span>
+                        </td>
+                      </tr>
+
+                        <!-- Squad Members -->
+                        <tr ng-repeat="member in squad.members | orderBy:'name'" ng-hide="hide_fleet || hide_wing || hide_squad">
+                          <td class="squad-member">{{ member.character.name }}</td>
+                          <td class="ship"><span class="text-{{ member.ship.style }}">{{ member.ship.name }}</span></td>
+                        </tr>
+                      <tr ng-hide="true"></tr>
+                      <tr ng-repeat-end ng-hide="true"></tr>
+                    <tr ng-hide="true"></tr>
+                    <tr ng-repeat-end ng-hide="true"></tr>
+
+                  </tbody>
+                </table>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="col-md-7">
+          <div class="row">
+
+            <!-- Ships -->
+            <div class="col-md-6">
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <strong>Ships ({{ fleetLive.fleet.member_count }})</strong>
+                </div>
+
+                <div class="panel-body scan-list">
+                  <div class="row">
+                    <table class="table table-striped table-hover">
+                      <tr ng-repeat="ship in fleetLive.fleet.ships | orderBy:'-ships'">
+                        <td class="{{ ship.style }} col-sm-2"><div align="center">{{ ship.ships }}</div></td>
+                        <td><strong>{{ ship.name }}</strong></td>
+                        <td class="icon"><img class="pull-right" ng-src="//image.eveonline.com/render/{{ ship.id }}_32.png"></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Caps -->
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <strong>Capitals ({{ fleetLive.fleet.cap_count }})</strong>
+                </div>
+
+                <div class="panel-body scan-list">
+                  <div class="row">
+                    <table class="table table-striped table-hover">
+                      <tr ng-repeat="group in fleetLive.fleet.caps | orderBy:'-ships'">
+                        <td class="{{ group.style }} col-sm-2"><div align="center">{{ group.ships }}</div></td>
+                        <td><strong>{{ group.name }}</strong></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Subs -->
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <strong>Subcaps ({{ fleetLive.fleet.sub_count }})</strong>
+                </div>
+
+                <div class="panel-body scan-list">
+                  <div class="row">
+                    <table class="table table-striped table-hover">
+                      <tr ng-repeat="group in fleetLive.fleet.subs | orderBy:'-ships'">
+                        <td class="{{ group.style }} col-sm-2"><div align="center">{{ group.ships }}</div></td>
+                        <td><strong>{{ group.name }}</strong></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="col-md-6">
+              <!-- Systems -->
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <strong>Systems ({{ fleetLive.fleet.systems.length }})</strong>
+                </div>
+
+                <div class="panel-body scan-list">
+                  <div class="row">
+                    <table class="table table-striped table-hover">
+                      <tr ng-repeat="system in fleetLive.fleet.systems | orderBy:'-members'">
+                        <td class="icon col-lg-1"><img class="logo" ng-src="https://imageserver.eveonline.com/Type/{{ system.system.sun_type }}_64.png"></td>
+                        <td class="name"><strong>{{ system.system.name }} &lt; {{ system.region.name }}</strong></td>
+                        <td><span class="badge pull-right">{{ system.members }}</span></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Alliances -->
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <strong>Alliances ({{ fleetLive.fleet.alliances.length }})</strong>
+                </div>
+
+                <div class="panel-body scan-list">
+                  <div class="row">
+                    <table class="table table-striped table-hover">
+                      <tr ng-repeat="alliance in fleetLive.fleet.alliances | orderBy:'-members'">
+                        <td class="icon col-lg-1">
+                          <a href="{{ alliance.dotlan }}"><img class="logo" ng-src="https://image.eveonline.com/Alliance/{{ alliance.id }}_64.png"></a>
+                        </td>
+                        <td class="name"><strong>{{ alliance.name }}</strong></td>
+                        <td><span class="badge pull-right">{{ alliance.members }}</span></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+
+              <!-- Corporations -->
+              <div class="panel panel-default">
+                <div class="panel-heading">
+                  <strong>Corporations ({{ fleetLive.fleet.corps.length }})</strong>
+                </div>
+
+                <div class="panel-body scan-list">
+                  <div class="row">
+                    <table class="table table-striped table-hover">
+                      <tr ng-repeat="corp in fleetLive.fleet.corps | orderBy:'-members'">
+                        <td class="icon col-lg-1">
+                          <a href="{{ corp.dotlan }}"><img class="logo" ng-src="https://image.eveonline.com/Corporation/{{ corp.id }}_64.png"></a>
+                        </td>
+                        <td class="name"><strong>{{ corp.name }}</strong></td>
+                        <td><span class="badge pull-right">{{ corp.members }}</span></td>
+                      </tr>
+                    </table>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+  </div>
+</div>
+{% endverbatim %}
+{% endblock %}

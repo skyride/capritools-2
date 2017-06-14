@@ -32,19 +32,30 @@ class Item(models.Model):
             return "text-%s" % settings.DSCAN_HIGHLIGHTS[self.group_id]
 
 
+    def style(self):
+        if self.group_id in settings.DSCAN_HIGHLIGHTS:
+            return settings.DSCAN_HIGHLIGHTS[self.group_id]
+        else:
+            return "active"
+
+
     def __unicode__(self):
         return "id=%s name='%s'" % (self.id, self.name)
 
 
-    def export(self):
-        key = "item_%s" % self.id
+    def export(self, group=False):
+        key = "item_%s_%s" % (group, self.id)
         out = cache.get(key)
         if out != None:
             return out
         out = {
             "id": self.id,
             "name": self.name,
-            "group": {
+            "style": self.style()
+        }
+
+        if group:
+            out['group'] = {
                 "id": self.group_id,
                 "name": self.group.name,
                 "category": {
@@ -52,7 +63,6 @@ class Item(models.Model):
                     "name": self.group.category.name
                 }
             }
-        }
 
         cache.set(key, out, 3600)
         return out
