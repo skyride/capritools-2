@@ -10,7 +10,7 @@ from capritools2.esi import ESI
 
 class Fleet(models.Model):
     id = models.BigIntegerField(primary_key=True)
-    key = models.CharField(max_length=7)
+    key = models.CharField(max_length=7, db_index=True)
     user = models.ForeignKey(User)
     token = models.ForeignKey(UserSocialAuth)
     active = models.BooleanField(default=True, db_index=True)

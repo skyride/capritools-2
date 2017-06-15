@@ -16,25 +16,24 @@ class Fleet_MemberEvent(models.Model):
 
 
     def export(self, character=False):
-        key = "Fleet_MemberEvent_%s_%s" % (character, self.id)
+        key = "Fleet_MemberEvent___%s_%s" % (character, self.id)
         out = cache.get(key)
         if out != None:
             return out
 
-        if self.event == "join":
-            message = "%s joined fleet" % self.character.name
-        if self.event == "leave":
-            message = "%s left fleet" % self.character.name
-        if self.event == "accept_fleetwarp":
-            message = "%s flagged accept Fleet Warp" % self.character.name
-        if self.event == "exempt_fleetwarp":
-            message = "%s flagged exempt Fleet Warp" % self.character.name
+        # if self.event == "join":
+        #     message = "%s joined fleet" % self.character.name
+        # if self.event == "leave":
+        #     message = "%s left fleet" % self.character.name
+        # if self.event == "accept_fleetwarp":
+        #     message = "%s flagged accept Fleet Warp" % self.character.name
+        # if self.event == "exempt_fleetwarp":
+        #     message = "%s flagged exempt Fleet Warp" % self.character.name
 
         out = {
             "id": self.id,
             "event": self.event,
-            "message": message,
-            "timestamp": str(self.timestamp)
+            "timestamp": self.timestamp.isoformat()
         }
         if character:
             out['character'] = self.character.export()

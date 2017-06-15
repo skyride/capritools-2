@@ -26,7 +26,7 @@ class Fleet_ShipChange(models.Model):
             "id": self.id,
             "from_ship": self.from_ship.export(),
             "to_ship": self.to_ship.export(),
-            "timestamp": str(self.timestamp)
+            "timestamp": self.timestamp.isoformat()
         }
         if character:
             out['character'] = self.character.export()

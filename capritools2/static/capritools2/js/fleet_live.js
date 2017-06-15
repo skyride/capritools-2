@@ -10,6 +10,7 @@ angular.module('fleetLiveApp', [])
       $http.get("/fleets/live/monolith/"+key).then(
         function(res) {
           fleetLive.fleet = res.data;
+          fleetLive.fleet.all = res.data.member_events.concat(res.data.ship_changes, res.data.jumps);
           nextLoad();
         }
       )

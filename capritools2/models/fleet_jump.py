@@ -17,7 +17,7 @@ class Fleet_Jump(models.Model):
 
 
     def export(self, character=False):
-        key = "fleet_jump_%s_%s" % (self.id, character)
+        key = "fleet_jump___%s_%s" % (self.id, character)
         out = cache.get(key)
         if out != None:
             return out
@@ -25,7 +25,7 @@ class Fleet_Jump(models.Model):
         out = {
             "from_system": self.from_system.export(),
             "to_system": self.to_system.export(),
-            "timestamp": str(self.timestamp)
+            "timestamp": self.timestamp.isoformat()
         }
         if character:
             out['character'] = self.character.export()
