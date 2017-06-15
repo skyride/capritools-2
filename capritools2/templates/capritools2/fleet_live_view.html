@@ -379,7 +379,7 @@ var key = "{{ fleet.key }}";
                 <td><strong>{{ member.character.name }} <span ng-if="member.boss">(Boss)</span></strong></td>
                 <td class="icon"><img class="logo" ng-src="//imageserver.eveonline.com/Corporation/{{ member.corporation.id }}_64.png"></td>
                 <td><strong>{{ member.corporation.name }}</strong></td>
-                <td class="icon"><img class="logo" ng-src="//imageserver.eveonline.com/Alliance/{{ member.alliance.id }}_64.png"></td>
+                <td class="icon"><img class="logo" ng-if="member.alliance" ng-src="//imageserver.eveonline.com/Alliance/{{ member.alliance.id }}_64.png"></td>
                 <td><strong>{{ member.alliance.name }}</strong></td>
                 <td class="icon"><img class="logo" ng-src="//imageserver.eveonline.com/Type/{{ member.ship.id }}_64.png"></td>
                 <td><strong><span class="text-{{ member.ship.style }}">{{ member.ship.name }}</span></strong></td>
