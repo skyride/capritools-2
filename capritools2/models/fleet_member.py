@@ -38,7 +38,7 @@ class Fleet_Member(models.Model):
             "role_name": self.role_name,
             "fleet": {},
             "character": self.character.export(),
-            "ship": self.ship.export(),
+            "ship": self.ship.export(group=True),
             "location": self.system.export()
         }
 

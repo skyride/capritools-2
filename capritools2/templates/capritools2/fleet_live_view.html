@@ -69,7 +69,7 @@ var key = "{{ fleet.key }}";
                         </tr>
 
                         <!-- Wings -->
-                        <tr ng-repeat-start="wing in fleetLive.fleet.wings | orderBy: 'id'" ng-click="hide_wing = !hide_wing" ng-hide="hide_fleet">
+                        <tr ng-repeat-start="wing in fleetLive.fleet.wings | orderBy: 'id'" ng-hide="hide_fleet">
                           <td class="wing-command">
                             <span class="glyphicon glyphicon-menu-down" ng-hide="hide_wing"></span>
                             <span class="glyphicon glyphicon-menu-right" ng-hide="!hide_wing"></span>
@@ -83,7 +83,7 @@ var key = "{{ fleet.key }}";
                         </tr>
 
                           <!-- Squads -->
-                          <tr ng-repeat-start="squad in wing.squads | orderBy: 'id'" ng-click="hide_squad = !hide_squad" ng-hide="hide_fleet || hide_wing">
+                          <tr ng-repeat-start="squad in wing.squads | orderBy: 'id'" ng-hide="hide_fleet || hide_wing">
                             <td class="squad-command">
                               <span class="glyphicon glyphicon-menu-down" ng-hide="hide_squad"></span>
                               <span class="glyphicon glyphicon-menu-right" ng-hide="!hide_squad"></span>
@@ -312,20 +312,69 @@ var key = "{{ fleet.key }}";
             <thead>
               <tr>
                 <th></th>
-                <th>Name</th>
+                <th>
+                  <a href="" ng-init="memberSortType = 'character.name'" ng-click="memberSortType = 'character.name'; memberSortOrder = !memberSortOrder">
+                    Name
+                    <span ng-show="memberSortType == 'character.name'">
+                      <span ng-hide="memberSortOrder" class="glyphicon glyphicon-triangle-bottom"></span>
+                      <span ng-hide="!memberSortOrder" class="glyphicon glyphicon-triangle-top"></span>
+                    </span>
+                  </a>
+                </th>
                 <th></th>
-                <th>Corp</th>
+                <th>
+                  <a href="" ng-click="memberSortType = 'corporation.name'; memberSortOrder = !memberSortOrder">
+                    Corporation
+                    <span ng-show="memberSortType == 'corporation.name'">
+                      <span ng-hide="memberSortOrder" class="glyphicon glyphicon-triangle-bottom"></span>
+                      <span ng-hide="!memberSortOrder" class="glyphicon glyphicon-triangle-top"></span>
+                    </span>
+                  </a>
+                </th>
                 <th></th>
-                <th>Alliance</th>
+                <th>
+                  <a href="" ng-click="memberSortType = 'alliance.name'; memberSortOrder = !memberSortOrder">
+                    Alliance
+                    <span ng-show="memberSortType == 'alliance.name'">
+                      <span ng-hide="memberSortOrder" class="glyphicon glyphicon-triangle-bottom"></span>
+                      <span ng-hide="!memberSortOrder" class="glyphicon glyphicon-triangle-top"></span>
+                    </span>
+                  </a>
+                </th>
                 <th></th>
-                <th>Ship</th>
+                <th>
+                  <a href="" ng-click="memberSortType = 'ship.name'; memberSortOrder = !memberSortOrder">
+                    Ship
+                    <span ng-show="memberSortType == 'ship.name'">
+                      <span ng-hide="memberSortOrder" class="glyphicon glyphicon-triangle-bottom"></span>
+                      <span ng-hide="!memberSortOrder" class="glyphicon glyphicon-triangle-top"></span>
+                    </span>
+                  </a>
+                </th>
+                <th>
+                  <a href="" ng-click="memberSortType = 'ship.group.name'; memberSortOrder = !memberSortOrder">
+                    Group
+                    <span ng-show="memberSortType == 'ship.group.name'">
+                      <span ng-hide="memberSortOrder" class="glyphicon glyphicon-triangle-bottom"></span>
+                      <span ng-hide="!memberSortOrder" class="glyphicon glyphicon-triangle-top"></span>
+                    </span>
+                  </a>
+                </th>
                 <th></th>
-                <th>System</th>
+                <th>
+                  <a href="" ng-click="memberSortType = 'location.system.name'; memberSortOrder = !memberSortOrder">
+                    System
+                    <span ng-show="memberSortType == 'location.system.name'">
+                      <span ng-hide="memberSortOrder" class="glyphicon glyphicon-triangle-bottom"></span>
+                      <span ng-hide="!memberSortOrder" class="glyphicon glyphicon-triangle-top"></span>
+                    </span>
+                  </a>
+                </th>
               </tr>
             </thead>
 
             <tbody>
-              <tr ng-repeat="member in fleetLive.fleet.members|orderBy:'character.name'">
+              <tr ng-repeat="member in fleetLive.fleet.members|orderBy:memberSortType:memberSortOrder">
                 <td class="icon"><img class="logo" ng-src="//imageserver.eveonline.com/Character/{{ member.character.id }}_64.jpg"></td>
                 <td><strong>{{ member.character.name }} <span ng-if="member.boss">(Boss)</span></strong></td>
                 <td class="icon"><img class="logo" ng-src="//imageserver.eveonline.com/Corporation/{{ member.corporation.id }}_64.png"></td>
@@ -334,6 +383,7 @@ var key = "{{ fleet.key }}";
                 <td><strong>{{ member.alliance.name }}</strong></td>
                 <td class="icon"><img class="logo" ng-src="//imageserver.eveonline.com/Type/{{ member.ship.id }}_64.png"></td>
                 <td><strong><span class="text-{{ member.ship.style }}">{{ member.ship.name }}</span></strong></td>
+                <td><strong>{{ member.ship.group.name }}</strong></td>
                 <td class="icon"><img class="logo" ng-src="//imageserver.eveonline.com/Type/{{ member.location.system.sun_type }}_64.png"></td>
                 <td><strong>{{ member.location.system.name }} &lt; {{ member.location.region.name }}</strong></td>
               </tr>
