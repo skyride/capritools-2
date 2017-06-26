@@ -1,4 +1,5 @@
 {% extends 'capritools2/base.html' %}
+{% load cache %}
 
 {% block prefix_title %}{{ scan.added|date:"H:i" }} LS ({{ scan.characters.count }}) {{ scan.added|date:"d/m/y" }}{% endblock %}
 
@@ -25,6 +26,7 @@ function highlightOff(ids) {
 {% block active_localscan %}active{% endblock %}
 
 {% block content %}
+{% cache 3600 localscan_contents %}
 <div id="localscan">
   <div class="panel panel-default">
     <div class="panel-heading">
@@ -143,4 +145,5 @@ function highlightOff(ids) {
     </div>
   </div>
 </div>
+{% endcache %}
 {% endblock %}

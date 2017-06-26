@@ -27,44 +27,28 @@ def localscan_view(request, key):
         request.session['alert_message'] = "The Local Scan you were looking for does not exist."
         return redirect("localscan")
 
-    # Check the cache
-    if "localscan_%s" % key in cache:
-        data = cache.get("localscan_%s" % key)
-        return render_page(
-            "capritools2/localscan_view.html",
-            data,
-            request
-        )
-
-
-    affiliations = {}
-    for affiliation in scan.affiliations.values('corporation', 'alliance'):
-        affiliations[affiliation['corporation']] = [affiliation['alliance']]
-
-    for affiliation in scan.affiliations.values('corporation', 'alliance').order_by('alliance'):
-        if affiliation['alliance'] in affiliations:
-            affiliations[affiliation['alliance']].append(affiliation['corporation'])
-        else:
-            affiliations[affiliation['alliance']] = [affiliation['corporation']]
-
     alliances = Alliance.objects.filter(
         localChars__scan=scan
+    ).prefetch_related(
+        'localChars'
     ).annotate(
         item_count=Count('localChars')
     ).order_by(
         '-item_count'
-    )
+    ).all()
     for i, alliance in enumerate(alliances):
         alliance.style = ['info', 'success', 'warning', 'danger'][i % 4]
         alliance.width = (float(100) / scan.characters.count()) * alliance.item_count
 
     corps = Corporation.objects.filter(
         localChars__scan=scan
+    ).prefetch_related(
+        'localChars'
     ).annotate(
         item_count=Count('localChars')
     ).order_by(
         '-item_count'
-    )
+    ).all()
     for i, corp in enumerate(corps):
         corp.style = ['info', 'success', 'warning', 'danger'][i % 4]
         corp.width = (float(100) / scan.characters.count()) * corp.item_count
@@ -72,12 +56,8 @@ def localscan_view(request, key):
     data = {
         'scan': scan,
         'alliances': alliances,
-        'corps': corps,
-        'affiliations': json.dumps(affiliations)
+        'corps': corps
     }
-
-    # Cache the object
-    cache.set("localscan_%s" % key, data, 60)
 
     return render_page(
         "capritools2/localscan_view.html",
