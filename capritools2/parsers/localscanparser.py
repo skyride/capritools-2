@@ -28,13 +28,20 @@ class LocalScanParser:
         affiliations = Set()
         charAffiliations = []
         names=input.split("\r\n")
-        try:
-            for chunk in [names[x:x+100] for x in xrange(0, len(names), 100)]:
-                r = self.xmlapi.eve.CharacterID(names=",".join(chunk))
-                ids = map(lambda x: x.characterID, r.characters)
-                charAffiliations = charAffiliations + self.api.post("/characters/affiliation/", data=json.dumps(ids))
-        except Exception:
-            return False
+    #try:
+        for chunk in [names[x:x+100] for x in xrange(0, len(names), 100)]:
+            get_vars = {
+                "search": ",".join(map(str, chunk)),
+                "categories": [
+                    "character"
+                ]
+            }
+            r = self.api.get("/search/", get_vars=get_vars)
+            print r
+            ids = map(lambda x: x['character_id'], r)
+            charAffiliations = charAffiliations + self.api.post("/characters/affiliation/", data=json.dumps(ids))
+    #except Exception:
+        #return False
 
         # Parse results
         added = 0

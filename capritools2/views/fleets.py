@@ -34,8 +34,12 @@ def fleet_scan_submit(request):
 @login_required
 @transaction.atomic
 def fleet_live_submit(request):
-    pattern = re.compile("https://crest-tq.eveonline.com/fleets/([0-9]+)/")
+    pattern = re.compile("/fleets/([0-9]+)/")
     m = pattern.search(request.POST.get("url"))
+    if m == None:
+        request.session['alert_type'] = "danger"
+        request.session['alert_message'] = "Invalid fleet link provided."
+        return redirect("fleet")
     fleet_id = m.group(1)
 
     # Create fleet object
