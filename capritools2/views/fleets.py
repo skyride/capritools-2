@@ -72,9 +72,9 @@ def fleet_live_monolith(request, key):
         "member_count": fleet.members.count(),
         "commander": fleet.commander(),
         "wings": map(lambda x: x.export(), fleet.wings.all()),
-        "member_events": map(lambda x: x.export(character=True), fleet.events.all()),
-        "ship_changes": map(lambda x: x.export(character=True), fleet.ship_changes.all()),
-        "jumps": map(lambda x: x.export(character=True), fleet.jumps.all()),
+        "member_events": map(lambda x: x.export(character=True), fleet.events.order_by('-timestamp').all()[:100]),
+        "ship_changes": map(lambda x: x.export(character=True), fleet.ship_changes.order_by('-timestamp').all()[:100]),
+        "jumps": map(lambda x: x.export(character=True), fleet.jumps.order_by('-timestamp').all()[:100]),
         "subs": map(lambda x: dict(x.export().items() + {"ships": x.ships}.items()), Group.objects.filter(
             items__fleet_members__fleet=fleet
         ).exclude(
