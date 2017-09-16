@@ -117,7 +117,13 @@ def fleet_live_monolith(request, key):
 
 def fleet_live_memberhistory(request, key):
     fleet = Fleet.objects.get(key=key)
-    out = map(lambda x: x.export(character=True), fleet.events.all())
+    out = map(lambda x: x.export(character=True), fleet.events.order_by('timestamp').all())
+    return HttpResponse(json.dumps(out), content_type="application/json")
+
+
+def fleet_live_jumphistory(request, key):
+    fleet = Fleet.objects.get(key=key)
+    out = map(lambda x: x.export(character=True), fleet.jumps.order_by('timestamp').all())
     return HttpResponse(json.dumps(out), content_type="application/json")
 
 

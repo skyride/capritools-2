@@ -35,6 +35,7 @@ urlpatterns = [
     url(r'^fleets/live/submit/$', views.fleet_live_submit, name="fleet_live_submit"),
     url(r'^fleets/live/monolith/(?P<key>[a-zA-Z0-9]+)/$', views.fleet_live_monolith, name="fleet_live_monolith"),
     url(r'^fleets/live/(?P<key>[a-zA-Z0-9]+)/memberhistory$', views.fleet_live_memberhistory, name="fleet_live_memberhistory"),
+    url(r'^fleets/live/(?P<key>[a-zA-Z0-9]+)/jumphistory$', views.fleet_live_jumphistory, name="fleet_live_jumphistory"),
     url(r'^fleets/live/(?P<key>[a-zA-Z0-9]+)/$', views.fleet_live_view, name="fleet_live_view"),
 
     url(r'^quickmath/$', views.quickmath_home, name="quickmath"),
