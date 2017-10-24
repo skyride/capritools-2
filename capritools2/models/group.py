@@ -13,6 +13,11 @@ class Group(models.Model):
     icon = models.IntegerField(null=True)
     published = models.BooleanField()
 
+
+    def __str__(self):
+        return "id=%s name=%s" % (self.id, self.name)
+
+
     def item_ids(self):
         r = self.items.values_list('id', flat=True)
         if r.count() > 0:

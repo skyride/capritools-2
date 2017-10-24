@@ -22,6 +22,9 @@ class Item(models.Model):
     sell = models.DecimalField(max_digits=16, decimal_places=2, default=0)
     last_updated = models.DateTimeField(null=True)
 
+    def __str__(self):
+        return "id=%s name=%s" % (self.id, self.name)
+
 
     def implant_type(self):
         return self.name.split(" ")[-1]
