@@ -37,7 +37,6 @@ class LocalScanParser:
                 ]
             }
             r = self.api.get("/search/", get_vars=get_vars)
-            print r
             ids = map(lambda x: x['character_id'], r)
             charAffiliations = charAffiliations + self.api.post("/characters/affiliation/", data=json.dumps(ids))
     #except Exception:
