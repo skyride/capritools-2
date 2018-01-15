@@ -48,10 +48,10 @@ class Corporation(models.Model):
                 return corporation
 
             api = ESI()
-            r = api.get("/corporations/%s/" % id)
+            r = api.get("/v4/corporations/%s/" % id)
             corporation = Corporation(
                 id=id,
-                name=r['corporation_name'],
+                name=r['name'],
                 ticker=r['ticker']
             )
             corporation.save()

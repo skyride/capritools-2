@@ -48,10 +48,10 @@ class Alliance(models.Model):
         alliance = Alliance.objects.filter(id=id)
         if alliance.count() == 0:
             api = ESI()
-            r = api.get("/alliances/%s/" % id)
+            r = api.get("/v3/alliances/%s/" % id)
             alliance = Alliance(
                 id=id,
-                name=r['alliance_name'],
+                name=r['name'],
                 ticker=r['ticker']
             )
             alliance.save()

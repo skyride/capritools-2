@@ -21,7 +21,7 @@ def fleet_live_update(fleet_id):
 
     # Update Fleet info
     old_members = set(map(lambda x: x.character, db_fleet.members.all()))
-    fleet = api.get("/fleets/$fleet/")
+    fleet = api.get("/v1/fleets/$fleet/")
     if fleet == None:
         db_fleet.active = False
         db_fleet.save()
@@ -34,7 +34,7 @@ def fleet_live_update(fleet_id):
     db_fleet.save()
 
     # Update fleet structure
-    wings = api.get("/fleets/$fleet/wings/")
+    wings = api.get("/v1/fleets/$fleet/wings/")
     db_fleet.wings.exclude(id__in=map(lambda x: x['id'], wings)).delete()
     for wing in wings:
         db_wing = Fleet_Wing.get_or_create(wing['id'], db_fleet, wing['name'])
@@ -50,7 +50,7 @@ def fleet_live_update(fleet_id):
             db_squad.save()
 
     # Update members
-    members = api.get("/fleets/$fleet/members/")
+    members = api.get("/v1/fleets/$fleet/members/")
     affiliations = []
     new_members = set(map(lambda x: Character.get_or_create_async(x['character_id']), members))
     db_fleet.members.exclude(character__in=new_members).delete()
@@ -142,7 +142,7 @@ def fleet_live_update(fleet_id):
 @app.task(name="fleet_live_fetch_affiliations")
 def fleet_live_fetch_affiliations(ids, fleet_id):
     api = ESI()
-    affiliations = api.post("/characters/affiliation/", data=json.dumps(ids))
+    affiliations = api.post("/v1/characters/affiliation/", data=json.dumps(ids))
 
     for affiliation in affiliations:
         db_member = Fleet_Member.objects.get(character_id=affiliation['character_id'], fleet_id=fleet_id)

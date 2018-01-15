@@ -28,7 +28,7 @@ def fetch_spawner():
 @app.task(name="fetch_character_info")
 def fetch_character_info(id):
     api = ESI()
-    char = api.get("/characters/%s/" % id)
+    char = api.get("/v4/characters/%s/" % id)
     db_char = Character.objects.get(id=id)
     db_char.name = char['name']
     db_char.save()
@@ -38,9 +38,9 @@ def fetch_character_info(id):
 @app.task(name="fetch_corp_info")
 def fetch_corp_info(id):
     api = ESI()
-    corp = api.get("/corporations/%s/" % id)
+    corp = api.get("/v4/corporations/%s/" % id)
     db_corp = Corporation.objects.get(id=id)
-    db_corp.name = corp['corporation_name']
+    db_corp.name = corp['name']
     db_corp.ticker = corp['ticker']
     db_corp.save()
     print "Fetched info for %s:%s" % (db_corp.id, db_corp.name)
@@ -49,9 +49,9 @@ def fetch_corp_info(id):
 @app.task(name="fetch_alliance_info")
 def fetch_alliance_info(id):
     api = ESI()
-    alliance = api.get("/alliances/%s/" % id)
+    alliance = api.get("/v3/alliances/%s/" % id)
     db_alliance = Alliance.objects.get(id=id)
-    db_alliance.name = alliance['alliance_name']
+    db_alliance.name = alliance['name']
     db_alliance.ticker = alliance['ticker']
     db_alliance.save()
     print "Fetched info for %s:%s" % (db_alliance.id, db_alliance.name)

@@ -13,7 +13,7 @@ class Faction(models.Model):
         faction = Faction.objects.filter(id=id)
         if faction.count() == 0:
             api = ESI()
-            factions = api.get("/universe/factions/")
+            factions = api.get("/v2/universe/factions/")
             faction = filter(lambda x: x['faction_id'] == id, factions)[0]
             faction = Faction(
                 id=faction['faction_id'],
