@@ -34,10 +34,12 @@ def dscan_view(request, key):
         item__group_id__in=supers
     ).annotate(
         items_mass=Sum('item__mass'),
-        items_volume=Sum('item__volume')
+        items_volume=Sum('item__volume'),
+        items_value=Sum('item__sell')
     ).aggregate(
         total_mass=Sum('items_mass'),
-        total_volume=Sum('items_volume')
+        total_volume=Sum('items_volume'),
+        total_value=Sum('items_value')
     )
 
     # Calculate bridge usage

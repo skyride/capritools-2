@@ -214,6 +214,7 @@ function highlightTypeOff(ids) {
                   </div>
 
                   <div class="panel-body">
+                    <strong>Aprox Fleet Value (hulls only):</strong> {{ info.total_value|floatformat:0|intcomma }} ISK<br />
                     <strong>Estimated Fleet Mass (excl. Supers):</strong> {{ info.total_mass|floatformat:0|intcomma }} kg <br />
                     <strong>Estimated Fleet Volume (excl. Supers):</strong> {{ info.total_volume|floatformat:0|intcomma }} m3<br />
                     <strong>Estimated Isotope Consumption to bridge 6ly (Titan):</strong> {{ info.titan_topes|floatformat:0|intcomma }}<br />
