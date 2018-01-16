@@ -8,10 +8,11 @@
 <h1>Localscan Paste Tool</h1>
 <p class="lead"></p>
 
+<!--
 <p>
   CCP broke the already hacky ESI endpoint I was using for this localscan tool. I'll fix this again once CCP finally implement parity. In the mean time I'd suggest using <a href="https://dscan.me/local/">dscan.me</a>.
-</p>
-{% comment %}
+</p>-->
+
 <form action="{% url 'localscan_submit' %}" method="post">
   <fieldset>
     {% csrf_token %}
@@ -22,5 +23,5 @@
     <input type="submit" class="btn btn-lg btn-primary">
   </fieldset>
 </form>
-{% endcomment %}
+
 {% endblock %}

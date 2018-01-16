@@ -28,19 +28,17 @@ class LocalScanParser:
         affiliations = Set()
         charAffiliations = []
         names=input.split("\r\n")
-    #try:
+
         for chunk in [names[x:x+100] for x in xrange(0, len(names), 100)]:
-            get_vars = {
-                "search": ",".join(map(str, chunk)),
-                "categories": [
-                    "character"
-                ]
-            }
-            r = self.api.get("/v2/search/", get_vars=get_vars)
-            ids = map(lambda x: x['character_id'], r)
+            ids = self.api.post(
+                "/v1/universe/ids/",
+                data=json.dumps(
+                    chunk
+                )
+            )
+
+            ids = map(lambda x: x['id'], ids['characters'])
             charAffiliations = charAffiliations + self.api.post("/v1/characters/affiliation/", data=json.dumps(ids))
-    #except Exception:
-        #return False
 
         # Parse results
         added = 0
@@ -48,29 +46,30 @@ class LocalScanParser:
             self.scan.delete()
             return False
 
-        for i, affiliation in enumerate(charAffiliations):
-            # Populate and retrieve objects in the DB
-            char = LocalScanChar(scan=self.scan)
-            char.corporation = Corporation.get_or_create(affiliation['corporation_id'])
-            if "alliance_id" in affiliation:
-                char.alliance = Alliance.get_or_create(affiliation['alliance_id'])
-                affiliations.add((affiliation['corporation_id'], affiliation['alliance_id']))
-            if "faction_id" in affiliation:
-                char.faction = Faction.get_or_create(affiliation['faction_id'])
+        with transaction.atomic():
+            for i, affiliation in enumerate(charAffiliations):
+                # Populate and retrieve objects in the DB
+                char = LocalScanChar(scan=self.scan)
+                char.corporation = Corporation.get_or_create(affiliation['corporation_id'])
+                if "alliance_id" in affiliation:
+                    char.alliance = Alliance.get_or_create(affiliation['alliance_id'])
+                    affiliations.add((affiliation['corporation_id'], affiliation['alliance_id']))
+                if "faction_id" in affiliation:
+                    char.faction = Faction.get_or_create(affiliation['faction_id'])
 
-            added += 1
-            char.save()
+                added += 1
+                char.save()
 
-        for corp_id, alliance_id in affiliations:
-            db_affiliation = Affiliation(
-                scan=self.scan,
-                corporation_id=corp_id,
-                alliance_id=alliance_id
-            )
-            db_affiliation.save()
+            for corp_id, alliance_id in affiliations:
+                db_affiliation = Affiliation(
+                    scan=self.scan,
+                    corporation_id=corp_id,
+                    alliance_id=alliance_id
+                )
+                db_affiliation.save()
 
-        if added > 0:
-            return True
-        else:
-            self.scan.save()
-            return False
+            if added > 0:
+                return True
+            else:
+                self.scan.save()
+                return False
