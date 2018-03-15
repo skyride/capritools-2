@@ -4,6 +4,8 @@ MAINTAINER Schemen <me@schemen.me>
 
 EXPOSE 8000
 
+ENV DEBUG=False
+
 WORKDIR /usr/src/app
 
 COPY ./docker-entrypoint.sh /
@@ -20,4 +22,4 @@ COPY . .
 
 VOLUME /usr/src/app/data
 
-CMD [ "python", "manage.py", "runserver", "0.0.0.0:8000" ]
+CMD [ "uwsgi", "--ini", "app.ini" ]
