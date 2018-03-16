@@ -1,7 +1,7 @@
 import os
 
 # SECURITY WARNING: don't run with debug turned on in production!
-if  os.environ['DEBUG']:
+if  os.environ['DEBUG'] == "True":
     DEBUG = True
 else:
     DEBUG = False
