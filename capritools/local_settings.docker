@@ -1,5 +1,5 @@
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = "os.environ['DEBUG']"
+DEBUG = os.environ['DEBUG']
 
 ALLOWED_HOSTS = ["*"]
 
@@ -32,8 +32,8 @@ CACHES = {
 }
 
 
-SOCIAL_AUTH_EVEONLINE_KEY = "os.environ['AUTH_KEY']"
-SOCIAL_AUTH_EVEONLINE_SECRET = "os.environ['AUTH_SECRET']"
+SOCIAL_AUTH_EVEONLINE_KEY = os.environ['AUTH_KEY']
+SOCIAL_AUTH_EVEONLINE_SECRET = os.environ['AUTH_SECRET']
 
 
 BROKER_URL = "redis://redis:6379/"

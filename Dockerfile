@@ -5,6 +5,7 @@ MAINTAINER Schemen <me@schemen.me>
 EXPOSE 8000
 
 ENV DEBUG=False
+ENV IMPORT=False
 
 WORKDIR /usr/src/app
 
