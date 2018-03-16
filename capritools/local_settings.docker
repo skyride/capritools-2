@@ -1,7 +1,10 @@
 import os
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = os.environ['DEBUG']
+if  os.environ['DEBUG']:
+    DEBUG = True
+else:
+    DEBUG = False
 
 ALLOWED_HOSTS = ["*"]
 

@@ -6,6 +6,8 @@ EXPOSE 8000
 
 ENV DEBUG=False
 ENV IMPORT=False
+ENV AUTH_KEY=None
+ENV AUTH_SECRET=None
 
 WORKDIR /usr/src/app
 
