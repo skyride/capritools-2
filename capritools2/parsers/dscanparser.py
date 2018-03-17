@@ -9,7 +9,7 @@ from capritools2.stuff import random_key
 
 class DscanParser:
     scan = None
-    pattern = re.compile(r"(?P<type_id>\d+)\s(?P<name>.+)\s(?P<type_name>.+)\s((?P<distance>[\d,\.]+) (?P<unit>m|km|AU)|(?P<unknown_distance>-))")
+    pattern = re.compile(r"(?P<type_id>\d+)\s(?P<name>.+)\s(?P<type_name>.+)\s((?P<distance>[\d,\.,\']+) (?P<unit>m|km|AU)|(?P<unknown_distance>-))")
     oldPattern = re.compile(r"(?P<name>.+)\t(?P<type_name>.+)\t((?P<distance>[\d,\.]+) (?P<unit>m|km|AU)|(?P<unknown_distance>-))")
     sunPattern = re.compile(r"(.+) - Star")
     planetPattern = re.compile(r"(.+) [IVX]+")
