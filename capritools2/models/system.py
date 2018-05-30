@@ -16,7 +16,7 @@ class System(models.Model):
     z = models.FloatField()
     factionID = models.IntegerField(null=True)
     radius = models.FloatField(null=True)
-    sun = models.ForeignKey(Item)
+    sun = models.ForeignKey(Item, null=True, default=None)
 
 
     def dotlan_system(self):
