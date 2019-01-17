@@ -3,7 +3,7 @@ billiard==3.5.0.2
 celery==4.0.2
 certifi==2017.4.17
 chardet==3.0.3
-Django==1.11.1
+Django<2
 eveapi==1.3.2
 future==0.16.0
 idna==2.5
