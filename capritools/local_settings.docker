@@ -1,0 +1,45 @@
+import os
+
+# SECURITY WARNING: don't run with debug turned on in production!
+if  os.environ['DEBUG'] == "True":
+    DEBUG = True
+else:
+    DEBUG = False
+
+ALLOWED_HOSTS = ["*"]
+
+# database configuration
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.sqlite3',        # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'data/capritools.db',                   # Or path to database file if using sqlite3.
+        'USER': '',                             # Not used with sqlite3.
+        'PASSWORD': '',                         # Not used with sqlite3.
+        'HOST': '',                             # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                             # Set to empty string for default. Not used with sqlite3.
+    },
+    # this database should contain a current version of the Static Data Export
+    'import': {
+        'ENGINE': 'django.db.backends.sqlite3',
+        'NAME': 'evesde.db',
+        'USER': '',
+        'PASSWORD': '',
+        'HOST': '',
+        'PORT': '',
+    },
+}
+
+CACHES = {
+    'default': {
+        'BACKEND': 'django.core.cache.backends.memcached.MemcachedCache',
+        'LOCATION': '127.0.0.1:11211',
+    }
+}
+
+
+SOCIAL_AUTH_EVEONLINE_KEY = os.environ['AUTH_KEY']
+SOCIAL_AUTH_EVEONLINE_SECRET = os.environ['AUTH_SECRET']
+
+
+BROKER_URL = "redis://redis:6379/"
+CELERY_RESULT_BACKEND = "redis://redis:6379/"

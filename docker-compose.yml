@@ -1,0 +1,15 @@
+version: '2'
+
+services:
+    capritool:
+      build: .
+      image: capritools:latest
+      ports:
+          - 8000:8000
+      volumes:
+        - capritool:/var/src/app/data
+      environment:
+        DEBUG: "False"
+
+    redis:
+      image: redis
