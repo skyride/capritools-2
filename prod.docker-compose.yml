@@ -6,7 +6,7 @@ services:
     env_file:
       - .env
     ports:
-      - ${PORT}:8000
+      - ${PORT}:${PORT}
     depends_on:
       - redis
 
