@@ -4,7 +4,7 @@ REDIS_URL = os.environ['REDIS_URL']
 
 # SECURITY WARNING: don't run with debug turned on in production!
 SECRET_KEY = os.environ['SECRET_KEY']
-DEBUG = bool(os.environ.get("DEBUG", False))
+DEBUG = bool(int(os.environ.get("DEBUG", False)))
 
 ALLOWED_HOSTS = ["*"]
 

@@ -5,7 +5,6 @@ services:
       context: .
     restart: always
     environment:
-      - DEBUG=1
       - SECRET_KEY=dfgkdfjhigfhgnb4573756htn
       - DB_HOST=postgres
       - DB_NAME=capritools2
