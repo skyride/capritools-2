@@ -11,3 +11,5 @@ celerybeat-schedule
 celerybeat.pid
 static-dist
 *.dscan
+env/
+.env

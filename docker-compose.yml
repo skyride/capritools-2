@@ -1,0 +1,45 @@
+version: "3"
+services:
+  app:
+    build:
+      context: .
+    restart: always
+    environment:
+      - DEBUG=1
+      - SECRET_KEY=dfgkdfjhigfhgnb4573756htn
+      - DB_HOST=postgres
+      - DB_NAME=capritools2
+      - DB_USER=capritools2
+      - DB_PASSWORD=FygY3YYt
+      - SDE_HOST=postgres
+      - SDE_NAME=capritools2
+      - SDE_USER=capritools2
+      - SDE_PASSWORD=FygY3YYt
+      - REDIS_URL=redis:6379
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    ports:
+      - 8000:8000
+    command: ./manage.py runserver 0:8000
+    depends_on:
+      - postgres
+      - redis
+
+  postgres:
+    image: postgres:12.3
+    volumes:
+      - pgdata:/var/lib/postgresql/data
+    environment:
+      - POSTGRES_USER=capritools2
+      - POSTGRES_PASSWORD=FygY3YYt
+
+  redis:
+    image: redis:5.0
+    volumes:
+      - redisdata:/data
+
+volumes:
+  pgdata:
+  redisdata:
