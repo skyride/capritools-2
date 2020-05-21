@@ -148,9 +148,6 @@ SOCIAL_AUTH_EVEONLINE_SCOPE = [
 
 PRICE_URL = "https://api.eve-central.com/api/marketstat/json?regionlimit=10000002&typeid=%s"
 
-# load local settings
-from local_settings import *  # NOPEP8
-
 
 # Ship Type Highlighting
 DSCAN_HIGHLIGHTS = {
@@ -218,3 +215,7 @@ CELERYBEAT_SCHEDULE = {
         'schedule': timedelta(seconds=10)
     }
 }
+
+
+# load local settings
+from local_settings import *  # NOPEP8

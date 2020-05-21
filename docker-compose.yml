@@ -4,17 +4,6 @@ services:
     build:
       context: .
     restart: always
-    environment:
-      - SECRET_KEY=dfgkdfjhigfhgnb4573756htn
-      - DB_HOST=postgres
-      - DB_NAME=capritools2
-      - DB_USER=capritools2
-      - DB_PASSWORD=FygY3YYt
-      - SDE_HOST=postgres
-      - SDE_NAME=capritools2
-      - SDE_USER=capritools2
-      - SDE_PASSWORD=FygY3YYt
-      - REDIS_URL=redis:6379
     env_file:
       - .env
     volumes:
@@ -22,6 +11,19 @@ services:
     ports:
       - 8000:8000
     command: ./manage.py runserver 0:8000
+    depends_on:
+      - postgres
+      - redis
+
+  celery:
+    build:
+      context: .
+    restart: always
+    env_file:
+      - .env
+    volumes:
+      - .:/app
+    command: celery worker -A capritools -B -c 2
     depends_on:
       - postgres
       - redis

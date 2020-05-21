@@ -39,6 +39,7 @@ CACHES = {
 BROKER_URL = "redis://%s/1" % REDIS_URL
 CELERY_RESULT_BACKEND = "redis://%s/2" % REDIS_URL
 
+
 OLD_SCANS_ROOT = "/old/scans/"
 
 
