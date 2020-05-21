@@ -44,9 +44,9 @@ class Importer:
         self.cursor.execute(
             """
             SELECT
-                solarSystemID, constellationID, regionID, solarSystemName,
-                x, y, z, factionID, radius, sunTypeID
-            FROM mapSolarSystems
+                "solarSystemID", "constellationID", "regionID", "solarSystemName",
+                x, y, z, "factionID", radius, "sunTypeID"
+            FROM "mapSolarSystems"
             """
         )
 
@@ -81,9 +81,9 @@ class Importer:
         self.cursor.execute(
             """
             SELECT
-                constellationID, regionID, constellationName,
-                x, y, z, factionID, radius
-            FROM mapConstellations
+                "constellationID", "regionID", "constellationName",
+                x, y, z, "factionID", radius
+            FROM "mapConstellations"
             """
         )
 
@@ -116,8 +116,8 @@ class Importer:
         self.cursor.execute(
             """
             SELECT
-                regionID, regionName, x, y, z, factionID, radius
-            FROM mapRegions
+                "regionID", "regionName", x, y, z, "factionID", radius
+            FROM "mapRegions"
             """
         )
 
@@ -149,11 +149,13 @@ class Importer:
         self.cursor.execute(
             """
             SELECT
-                typeID, groupID, typeName, description, mass, volume, capacity, raceID,
-                published, marketGroupID, iconID
-            FROM invTypes
+                "typeID", "groupID", "typeName", description, mass, volume, capacity, "raceID",
+                published, "marketGroupID", "iconID"
+            FROM "invTypes"
             """
         )
+        # Get group ids for integrity check
+        group_ids = set(Group.objects.values_list('id', flat=True))
 
         for row in self.cursor:
             db_item = Item.objects.filter(id=row[0])
@@ -165,17 +167,18 @@ class Importer:
             else:
                 db_item = db_item[0]
 
-            db_item.group_id = row[1]
-            db_item.name = row[2]
-            db_item.description = row[3]
-            db_item.mass = row[4]
-            db_item.volume = row[5]
-            db_item.capacity = row[6]
-            db_item.raceID = row[7]
-            db_item.published = row[8]
-            db_item.marketGroup_id = row[9]
-            db_item.icon = row[10]
-            db_item.save()
+            if row[1] in group_ids:
+                db_item.group_id = row[1]
+                db_item.name = row[2]
+                db_item.description = row[3]
+                db_item.mass = row[4]
+                db_item.volume = row[5]
+                db_item.capacity = row[6]
+                db_item.raceID = row[7]
+                db_item.published = row[8]
+                db_item.marketGroup_id = row[9]
+                db_item.icon = row[10]
+                db_item.save()
 
         return added
 
@@ -186,9 +189,9 @@ class Importer:
 
         query = """
         SELECT
-            marketGroupID, parentGroupID, marketGroupName, description, iconID, hasTypes
-        FROM invMarketGroups
-        ORDER BY hasTypes, parentGroupID, marketGroupID
+            "marketGroupID", "parentGroupID", "marketGroupName", description, "iconID", "hasTypes"
+        FROM "invMarketGroups"
+        ORDER BY "hasTypes", "parentGroupID", "marketGroupID"
         """
 
         # Add new market groups
@@ -225,8 +228,8 @@ class Importer:
         self.cursor.execute(
             """
             SELECT
-                groupID, categoryID, groupName, iconID, published
-            FROM invGroups
+                "groupID", "categoryID", "groupName", "iconID", published
+            FROM "invGroups"
             """
         )
 
@@ -256,8 +259,8 @@ class Importer:
         self.cursor.execute(
             """
             SELECT
-                categoryID, categoryName, iconID, published
-            FROM invCategories
+                "categoryID", "categoryName", "iconID", published
+            FROM "invCategories"
             """
         )
 
