@@ -1,0 +1,28 @@
+version: "3"
+services:
+  app:
+    image: skyride/capritools-2:1.1.0
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${PORT}:8000
+    depends_on:
+      - redis
+
+  celery:
+    image: skyride/capritools-2:1.1.0
+    restart: always
+    env_file:
+      - .env
+    command: celery worker -A capritools -B -c 2
+    depends_on:
+      - redis
+
+  redis:
+    image: redis:5.0
+    volumes:
+      - redisdata:/data
+
+volumes:
+  redisdata:
