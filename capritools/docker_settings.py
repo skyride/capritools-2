@@ -19,7 +19,10 @@ DATABASES = {
         'USER': os.environ.get('DB_USER'),
         'PASSWORD': os.environ.get('DB_PASSWORD'),
         'HOST': os.environ.get('DB_HOST'),
-        'PORT': os.environ.get('DB_PORT', "")
+        'PORT': os.environ.get('DB_PORT', ""),
+        'OPTIONS' : {
+            'options': os.environ.get('DB_OPTIONS', "")
+        }
     },
     # this database should contain a current version of the Static Data Export
     'import': {
