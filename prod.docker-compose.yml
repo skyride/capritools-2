@@ -1,7 +1,7 @@
 version: "3"
 services:
   app:
-    image: skyride/capritools-2:1.2.0
+    image: skyride/capritools-2:1.2.1
     restart: always
     env_file:
       - .env
