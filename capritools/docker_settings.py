@@ -1,9 +1,12 @@
 import os
 
-REDIS_URL = os.environ['REDIS_URL']
+from django.utils.crypto import get_random_string
+
+
+REDIS_URL = os.environ.get('REDIS_URL')
 
 # SECURITY WARNING: don't run with debug turned on in production!
-SECRET_KEY = os.environ['SECRET_KEY']
+SECRET_KEY = os.environ.get('SECRET_KEY', get_random_string(12))
 DEBUG = bool(int(os.environ.get("DEBUG", False)))
 
 ALLOWED_HOSTS = ["*"]
@@ -12,20 +15,20 @@ ALLOWED_HOSTS = ["*"]
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['DB_NAME'],
-        'USER': os.environ['DB_USER'],
-        'PASSWORD': os.environ['DB_PASSWORD'],
-        'HOST': os.environ['DB_HOST'],
+        'NAME': os.environ.get('DB_NAME'),
+        'USER': os.environ.get('DB_USER'),
+        'PASSWORD': os.environ.get('DB_PASSWORD'),
+        'HOST': os.environ.get('DB_HOST'),
         'PORT': os.environ.get('DB_PORT', "")
     },
     # this database should contain a current version of the Static Data Export
     'import': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': os.environ['SDE_NAME'],
-        'USER': os.environ['SDE_USER'],
-        'PASSWORD': os.environ['SDE_PASSWORD'],
-        'HOST': os.environ['SDE_HOST'],
-        'PORT': os.environ.get('SDE_PORT', ""),
+        'NAME': os.environ.get('SDE_NAME'),
+        'USER': os.environ.get('SDE_USER'),
+        'PASSWORD': os.environ.get('SDE_PASSWORD'),
+        'HOST': os.environ.get('SDE_HOST'),
+        'PORT': os.environ.get('SDE_PORT', "")
     },
 }
 
@@ -41,7 +44,8 @@ CELERY_RESULT_BACKEND = "redis://%s/2" % REDIS_URL
 
 
 OLD_SCANS_ROOT = "/old/scans/"
+STATIC_ROOT = "/static/"
 
 
-SOCIAL_AUTH_EVEONLINE_KEY = os.environ['SOCIAL_AUTH_KEY']
-SOCIAL_AUTH_EVEONLINE_SECRET = os.environ['SOCIAL_AUTH_SECRET']
+SOCIAL_AUTH_EVEONLINE_KEY = os.environ.get('SOCIAL_AUTH_KEY')
+SOCIAL_AUTH_EVEONLINE_SECRET = os.environ.get('SOCIAL_AUTH_SECRET')

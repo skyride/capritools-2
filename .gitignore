@@ -13,3 +13,4 @@ static-dist
 *.dscan
 env/
 .env
+.vscode/
