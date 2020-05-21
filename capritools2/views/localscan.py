@@ -22,6 +22,7 @@ def localscan_home(request):
 def localscan_view(request, key):
     try:
         scan = LocalScan.objects.get(key=key)
+        scan_characters_count = scan.characters.count()
     except ObjectDoesNotExist:
         request.session['alert_type'] = "danger"
         request.session['alert_message'] = "The Local Scan you were looking for does not exist."
@@ -29,8 +30,6 @@ def localscan_view(request, key):
 
     alliances = Alliance.objects.filter(
         localChars__scan=scan
-    ).prefetch_related(
-        'localChars'
     ).annotate(
         item_count=Count('localChars')
     ).order_by(
@@ -38,12 +37,10 @@ def localscan_view(request, key):
     ).all()
     for i, alliance in enumerate(alliances):
         alliance.style = ['info', 'success', 'warning', 'danger'][i % 4]
-        alliance.width = (float(100) / scan.characters.count()) * alliance.item_count
+        alliance.width = (100.0 / scan_characters_count) * alliance.item_count
 
     corps = Corporation.objects.filter(
         localChars__scan=scan
-    ).prefetch_related(
-        'localChars'
     ).annotate(
         item_count=Count('localChars')
     ).order_by(
@@ -51,7 +48,7 @@ def localscan_view(request, key):
     ).all()
     for i, corp in enumerate(corps):
         corp.style = ['info', 'success', 'warning', 'danger'][i % 4]
-        corp.width = (float(100) / scan.characters.count()) * corp.item_count
+        corp.width = (100.0 / scan_characters_count) * corp.item_count
 
     data = {
         'scan': scan,

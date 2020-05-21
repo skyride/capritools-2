@@ -9,8 +9,8 @@ services:
     volumes:
       - .:/app
     ports:
-      - 8000:8000
-    command: ./manage.py runserver 0:8000
+      - ${PORT}:${PORT}
+    command: ./manage.py runserver 0:${PORT}
     depends_on:
       - postgres
       - redis
