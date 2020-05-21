@@ -15,7 +15,7 @@ services:
     restart: always
     env_file:
       - .env
-    command: celery worker -A capritools -B -c 2
+    command: celery worker -A capritools -B -c ${CELERY_WORKERS}
     depends_on:
       - redis
 
