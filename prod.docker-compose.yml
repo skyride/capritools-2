@@ -1,7 +1,7 @@
 version: "3"
 services:
   app:
-    image: skyride/capritools-2:1.2.2
+    image: skyride/capritools-2:1.3.0
     restart: always
     env_file:
       - .env
@@ -11,7 +11,7 @@ services:
       - redis
 
   celery:
-    image: skyride/capritools-2:1.2.2
+    image: skyride/capritools-2:1.3.0
     restart: always
     env_file:
       - .env

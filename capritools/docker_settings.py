@@ -1,6 +1,9 @@
 import os
 
+import sentry_sdk
 from django.utils.crypto import get_random_string
+from sentry_sdk.integrations.django import DjangoIntegration
+from sentry_sdk.integrations.redis import RedisIntegration
 
 
 REDIS_URL = os.environ.get('REDIS_URL')
@@ -52,3 +55,10 @@ STATIC_ROOT = "/static/"
 
 SOCIAL_AUTH_EVEONLINE_KEY = os.environ.get('SOCIAL_AUTH_KEY')
 SOCIAL_AUTH_EVEONLINE_SECRET = os.environ.get('SOCIAL_AUTH_SECRET')
+
+
+sentry_sdk.init(
+    dsn=os.environ.get("SENTRY_DSN"),
+    environment=os.environ.get("SENTRY_ENVIRONMENT"),
+    integrations=[DjangoIntegration(), RedisIntegration()],
+    send_default_pii=True)
