@@ -136,7 +136,7 @@ STATIC_ROOT = os.path.join(_PATH, 'static')
 STATIC_URL = '/static/'
 
 # ESI
-ESI_URL = "https://esi.tech.ccp.is"
+ESI_URL = "https://esi.evetech.net"
 ESI_DATASOURCE = "tranquility"
 ESI_RETRIES = 15
 
