@@ -57,38 +57,24 @@ def fetch_alliance_info(id):
     print "Fetched info for %s:%s" % (db_alliance.id, db_alliance.name)
 
 
-@app.task(name="price_update_spawner")
-def price_update_spawner():
-    items = Item.objects.filter(
-        Q(last_updated__lt=datetime.now(utc) - timedelta(days=1)) | Q(last_updated__isnull=True),
-        marketGroup_id__isnull=False
-    ).order_by(
-        'id'
-    ).all()
+@app.task
+def update_prices():
+    api = ESI()
+    prices = api.get("/v1/markets/prices/")
 
-    if items.count() > 0:
-        paginator = Paginator(items, 100)
-        for i in paginator.page_range:
-            page = paginator.page(i)
-            type_ids = map(lambda x: x.id, page)
-            fetch_prices.delay(type_ids)
+    # Transform to a type ID map
+    prices = {
+        price['type_id']: price
+        for price in prices}
 
-        print "Market Update Spawner called for the update of %s items" % (items.count())
+    # Update item ids
+    with transaction.atomic():
+        for type_id, data in prices.items():
+            updated = Item.objects.filter(id=type_id).update(
+                buy=data['adjusted_price'],
+                sell=data['adjusted_price'])
 
+            if updated < 1:
+                print "No item for ID %s" % type_id
 
-@app.task(name="fetch_prices")
-@transaction.atomic
-def fetch_prices(ids):
-    ids = ",".join(map(str, ids))
-    url = settings.PRICE_URL % ids
-    r = requests.get(url)
-    r = json.loads(r.text)
-
-    for item in r:
-        db_item = Item.objects.get(id=item['sell']['forQuery']['types'][0])
-        db_item.sell = round(item['sell']['fivePercent'], 2)
-        db_item.buy = round(item['buy']['fivePercent'], 2)
-        db_item.last_updated = datetime.now(utc)
-        db_item.save()
-
-    print "Updated prices for %s items" % len(r)
+        print "Updated prices for %s items" % len(prices)

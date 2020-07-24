@@ -23,7 +23,9 @@ services:
       - .env
     volumes:
       - .:/app
-    command: celery worker -A capritools -B -c 2
+    command: watchmedo auto-restart 
+      --directory=./ --pattern=*.py --recursive --ignore-patterns=./env/* -- 
+      celery worker -A capritools -B -c 2
     depends_on:
       - postgres
       - redis

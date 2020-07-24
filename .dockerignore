@@ -3,3 +3,4 @@ env/
 capritools/local_settings.py
 .vscode/
 .celerybeat-schedule
+celerybeat-schedule
