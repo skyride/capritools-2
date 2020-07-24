@@ -204,10 +204,10 @@ from datetime import timedelta
 
 CELERYBEAT_SCHEDULE = {
     # Spawns market update tasks
-    'price_update_spawner': {
-        'task': 'price_update_spawner',
-        'schedule': timedelta(minutes=2)
-    },
+    #'price_update_spawner': {
+    #    'task': 'price_update_spawner',
+    #    'schedule': timedelta(minutes=2)
+    #},
     'fetch_spawner': {
         'task': 'fetch_spawner',
         'schedule': timedelta(minutes=1)
