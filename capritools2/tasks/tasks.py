@@ -57,7 +57,7 @@ def fetch_alliance_info(id):
     print "Fetched info for %s:%s" % (db_alliance.id, db_alliance.name)
 
 
-@app.task
+@app.task(name="update_prices")
 def update_prices():
     api = ESI()
     prices = api.get("/v1/markets/prices/")
